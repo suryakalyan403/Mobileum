@@ -5,13 +5,16 @@ pipeline {
         stage('Docker Registry Login') {
             steps {
                 script {
-                    echo "***** Testing the Pipeline **********"
+                    echo "***** Authenticating to r.raid.cloud **********"
                     sh '''
                         export XDG_RUNTIME_DIR=/tmp/containers
                         mkdir -p $XDG_RUNTIME_DIR
-
-                        curl -sLX POST "$MOB_REG_URL/auth?f=skopeo" \
-                          -d "id=$MDS_ID&secret=$MDS_SECRET" | sh
+                         
+                        LOGIN_CMD=$(curl -sLX POST "$MOB_REG_URL/auth?f=docker" \
+                          -d "id=$MDS_ID&secret=$MDS_SECRET")
+                   
+                        echo "Running: $LOGIN_CMD"
+                        eval "$LOGIN_CMD"
                     '''
                 }
             }
