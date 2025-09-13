@@ -6,49 +6,89 @@ pipeline {
             steps {
                 script {
                     echo "***** Authenticating to r.raid.cloud **********"
-                    sh '''
-                        export XDG_RUNTIME_DIR=/tmp/containers
-                        mkdir -p $XDG_RUNTIME_DIR
-                         
-                        LOGIN_CMD=$(curl -sLX POST "$MOB_REG_URL/auth?f=docker" \
-                          -d "id=$MDS_ID&secret=$MDS_SECRET")
-                   
-                        echo "Running: $LOGIN_CMD"
-                        eval "$LOGIN_CMD"
-                    '''
+
+                    def mds_id     = "$MDS_ID"
+                    def mds_secret = "$MDS_SECRET"
+                    def mob_reg_url = "$MOB_REG_URL"
+
+                    mobDocRegLogin(mds_id, mds_secret, mob_reg_url)
                 }
             }
         }
 
         stage('Pull Image from Remote Registry') {
             steps {
-                echo "********* Pulling the Image *********"
-                sh '''
-                    docker pull $DOC_REG/$DOC_IMG:$IMG_TAG
-                '''
+                script {
+                    echo "********* Pulling the Image *********"
+
+                    def docker_reg = "$DOC_REG"
+                    def docker_img = "$DOC_IMG"
+                    def img_tag    = "$IMG_TAG"
+
+                    mobDockerPull(docker_reg, docker_img, img_tag)
+                }
             }
         }
 
         stage('Tag Image') {
             steps {
-                echo "********* Tagging the Image *********"
-                sh '''
-                    docker tag $DOC_REG/$DOC_IMG:$IMG_TAG \
-                        $LOC_DOC_REG/$DOC_IMG:$IMG_TAG
-                '''
+                script {
+                    echo "********* Tagging the Image *********"
+
+                    def docker_reg = "$DOC_REG"
+                    def docker_img = "$DOC_IMG"
+                    def img_tag    = "$IMG_TAG"
+                    def client_reg = "$LOC_DOC_REG"
+
+                    mobDockerTag(docker_reg, docker_img, img_tag, client_reg)
+                }
             }
         }
 
         stage('Push Image to Local Registry') {
             steps {
-                echo "********* Pushing Image to the Registry *********"
-                sh '''
-                    docker push $LOC_DOC_REG/$DOC_IMG:$IMG_TAG
-                '''
+                script {
+                    echo "********* Pushing Image to the Registry *********"
+
+                    def docker_img = "$DOC_IMG"
+                    def img_tag    = "$IMG_TAG"
+                    def client_reg = "$LOC_DOC_REG"
+
+                    clientDocRegPush(docker_img, img_tag, client_reg)
+                }
             }
         }
     }
 }
 
+def mobDocRegLogin(mds_id, mds_secret, mob_reg_url) {
+    sh """
+        export XDG_RUNTIME_DIR=/tmp/containers
+        mkdir -p \$XDG_RUNTIME_DIR
 
+        LOGIN_CMD=\$(curl -sLX POST "${mob_reg_url}/auth?f=docker" \
+                     -d "id=${mds_id}&secret=${mds_secret}")
+
+        eval "\$LOGIN_CMD"
+    """
+}
+
+def mobDockerPull(docker_reg, docker_img, img_tag) {
+    sh """
+        docker pull ${docker_reg}/${docker_img}:${img_tag}
+    """
+}
+
+def mobDockerTag(docker_reg, docker_img, img_tag, client_reg) {
+    sh """
+        docker tag ${docker_reg}/${docker_img}:${img_tag} \
+                   ${client_reg}/${docker_img}:${img_tag}
+    """
+}
+
+def clientDocRegPush(docker_img, img_tag, client_reg) {
+    sh """
+        docker push ${client_reg}/${docker_img}:${img_tag}
+    """
+}
 
