@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo "********* Pulling the Image *********"
                 sh '''
-                    docker pull $DOC_REG/aip/rafm-8.2.10:4.0.0
+                    docker pull $DOC_REG/$DOC_IMG
                 '''
             }
         }
@@ -33,8 +33,8 @@ pipeline {
             steps {
                 echo "********* Tagging the Image *********"
                 sh '''
-                    docker tag r.raid.cloud/aip/rafm-8.2.10:4.0.0 \
-                        localhost:5000/rafm-8.2.10:4.0.0
+                    docker tag $DOC_REG/$DOC_IMG \
+                        $DOC_IMG/$DOC_IMG
                 '''
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 echo "********* Pushing Image to the Registry *********"
                 sh '''
-                    docker push localhost:5000/rafm-8.2.10:4.0.0
+                    docker push $DOC_IMG/$DOC_IMG
                 '''
             }
         }
