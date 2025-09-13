@@ -34,7 +34,7 @@ pipeline {
                 echo "********* Tagging the Image *********"
                 sh '''
                     docker tag $DOC_REG/$DOC_IMG:$IMG_TAG \
-                        $DOC_IMG/$DOC_IMG:$IMG_TAG
+                        $LOC_DOC_REG/$DOC_IMG:$IMG_TAG
                 '''
             }
         }
