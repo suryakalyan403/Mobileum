@@ -43,7 +43,7 @@ pipeline {
             steps {
                 echo "********* Pushing Image to the Registry *********"
                 sh '''
-                    docker push $DOC_IMG/$DOC_IMG:$IMG_TAG
+                    docker push $LOC_DOC_REG/$DOC_IMG:$IMG_TAG
                 '''
             }
         }
