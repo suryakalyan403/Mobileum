@@ -1,0 +1,41 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "aip.names.fullname" . }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+rules:
+- apiGroups:
+  - ""
+  {{- if .Values.nattrmon.kubeMetrics }}
+  - "metrics.k8s.io"
+  {{- end }}
+  resources:
+  - pods
+  - services
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - get
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "aip.names.fullname" . }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "aip.names.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "aip.names.fullname" . }}

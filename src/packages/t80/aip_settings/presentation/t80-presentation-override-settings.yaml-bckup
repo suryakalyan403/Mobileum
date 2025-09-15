@@ -1,0 +1,56 @@
+############
+# AIP 2.0.2 compatible
+############
+
+deployment:
+  name: "t80presentationfm"
+  waitOnFailure: true  
+  ha: false
+  replicas: 1
+  upload-target: "portalfm"
+  productConfig:
+    secretName: "t80presentationfm-product-config"
+
+persistence:
+  common:
+  deployment:
+    - enabled: true
+      name: local
+      mounts:
+        - mountPath: /local
+      claim:
+        accessModes:
+          - ReadWriteOnce
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+
+    - enabled: true
+      name: fms-loading-sat1-rafm
+      mounts:
+        - mountPath: /fms-loading-sat1-rafm
+      claim:
+        accessModes:
+          - ReadWriteMany
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+
+customPodLabels:
+  cnfc_id: 5e89fbcc-0b35-4fa2-a84a-536be0090168
+
+permissions:
+  common:
+  deployment:
+    - /local
+
+riskProduct:
+  server: "common/aip_settings/resources/t80-presentation-resources.yaml"

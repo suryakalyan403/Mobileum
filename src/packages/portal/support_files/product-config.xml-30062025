@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ic:instance-config xmlns:ic="urn:wedo:infra:instance-config-2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <global>
+    <string name="DbHost">raiddb-pgsql-ha.ns-mbl-raid-pg</string>
+    <int name="DbPort">5432</int>
+    <string name="DbDatabase">rakuten</string>
+    <string name="DbDriver">org.postgresql.Driver</string>
+    <string name="PortalDbDriver">org.postgresql.Driver</string>
+    <string name="PortalDbJdbcUrl">jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten</string>
+    <string name="DbJdbcUrl">jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten</string>
+    <string name="DbRdbms">Postgresql</string>
+    <string name="DbUsersDbaUser">appadm</string>
+    <string name="DbUsersDbaPwd">appadm</string>
+    <string name="DbUsersAppUser">portalfms_app_f6_fm</string>
+    <string name="DbUsersAppPwd">portalfms_app_f6_fm</string>
+    <string name="DbUsersAdmUser">portalfms_adm_f6_fm</string>
+    <string name="DbUsersAdmPwd">portalfms_adm_f6_fm</string>
+    <string name="CompanyWebIdentifier">mobileum.com</string>
+    <string name="InstanceType">Portal</string>
+	<string name="PathToMainPortal">/opt/server</string>
+    <string name="PathToPortalInstance">/opt/server/instances/portalfm</string>
+    <string name="PathToInstance">/opt/server/instances/portalfm</string>
+    <string name="PORTAL_INSTANCE_NAME">portalfm</string>
+    <string name="ServerAdminPwd">Password1</string>
+    <string name="ServerInternalPwd">Password1</string>
+    <string name="DbTablespacesSmallData">raiddata</string>
+    <string name="DbTablespacesMediumData">raiddata</string>
+    <string name="DbTablespacesLargeData">raiddata</string>
+    <string name="DbTablespacesLOB">raiddata</string>
+    <string name="DbTablespacesSmallIndex">raiddata</string>
+    <string name="DbTablespacesMediumIndex">raiddata</string>
+    <string name="DbTablespacesLargeIndex">raiddata</string>
+    <string name="DbTablespacesDefault">raiddata</string>
+    <string name="DbTablespacesTemp">raiddata</string>
+    <string name="AppInstanceName">t80fm</string>
+    <string name="AppInstanceType">RAFM</string>
+	<!-- <string name="T80AppInstanceName">presentation-t80</string> -->
+	<string name="T80AppInstanceName">t80presentationfm</string>
+	<string name="T80AppInstanceType">RAFM</string>
+    <string name="vpePostgresDbName">rakuten</string>
+    <string name="vpePostgresSchema">r92dat3</string>
+    <string name="vpePostgresDbUri">jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten</string>
+    <string name="vpePostgresDbUserName">r92dat3</string>
+    <string name="vpePostgresDbPassword">r92dat3</string>
+    <string name="fileUploadRepo">$ROAMWARE_HOME/RAID/raid/wafplatform/instances/wafplatform/data/file-repository</string>
+    <int name="WebServerPort">8080</int> <!-- DO NOT CHANGE -->
+    <int name="WebServerShutdownPort">8081</int>
+    <!-- <string name="ServerMemoryOptions">-Xms128M -Xmx1024M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:MaxPermSize=256m</string> -->
+	<string name="ServerMemoryOptions">-Dfile.enconding=UTF-8 -Xms6400M -Xmx6400M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:MaxPermSize=256m -Xloggc:log/gc_`date +"%Y%m%d_%H%M%S"`.log  -Dfile.encoding=UTF-8 -XX:-DisableExplicitGC -XX:MaxPermSize=256m -Duser.timezone="Asia/Tokyo" -Djava.net.preferIPv6Addresses=true</string>
+        <!-- <string name="CustomPortalProperties">sfw.ticket.manager=true</string> -->
+		
+		<string name="CustomPortalProperties">
+        my.sites.max.elements=20
+        sso.enabled=true
+        sso.callback.url=http://[240b:c0e0:102:554f:1c05:c15e:11:5010]:8080/callback
+        sso.auth.type=oidc
+        sso.mapped.attributes=preferred_username:name,roles:role,group:user_group
+        sso.mapped.role.admin=Administrator
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Sadmin-gui=Administrator
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Fraud-admin-gui=Fraud Administrator
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Fraud-analyst-gui=Fraud Analyst
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Fraud-financial-gui=Fraud Financial
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Fraud-manager-gui=Fraud Manager
+        sso.mapped.user_group./rcp-kiba-ad-mobileum-raidfms-Fraud-operational-gui=Fraud Operational
+       oidc.discovery.uri=http://[240b:c0e0:102:554f:1c05:c15e:11:5011]:8080/realms/master/.well-known/openid-configuration
+        oidc.client.id=raid-staging
+        oidc.client.secret=iR1ITMuaLogHiQjszOVwT9GmwXLf54by
+        <!-- IMASIntegration=true -->
+        <!-- IMASEndpoint=http://[240b:c0e0:104:54c2:7676:ab01:0:3]:8080#VPE_Screens -->
+        <!-- IMASSessionTimeout=7200 -->
+        <!-- IMASAPIKey=MobileumSDS6 -->
+    </string>
+	 <!-- <string name="CustomPortalProperties"> -->
+                <!-- my.sites.max.elements=50 -->
+                <!-- redirect.url.security.mode=noredirect -->
+                <!-- redirect.url.domains.allowed=localhost,*.ns-mbl-raid-fm,uhn7kls14rbwk015.rmnkiba.local, rmnkiba.local,*rmnkiba.local,test.rmb-adtest.jp,sso.stg-id-proxy.rmb-lab.jp, portalfm.ns-mbl-raid-fm -->
+                <!-- </string> -->
+    <composite output-type="String" name="WebServerHost">${env.DEPLOYMENT_NAME}</composite> <!-- DO NOT CHANGE -->
+  </global>
+</ic:instance-config>

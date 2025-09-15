@@ -1,0 +1,26 @@
+image:
+  repository: aip/caddy
+  tag: 0.1.6
+
+replicaCount: 1
+
+config: |
+  :8080 {
+    route {
+      reverse_proxy {
+        dynamic a {
+          name portal-headless
+          port 8080
+          refresh 10s
+          dial_timeout 10s
+          dial_fallback_delay -1s
+        }
+        lb_policy cookie lb aip
+      }
+    }
+  }
+
+riskProduct:
+  namespace: portal-common
+  aipChart: aip/charts/caddy-0.1.6.tgz
+  externalPort: 30080

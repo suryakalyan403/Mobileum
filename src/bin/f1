@@ -1,0 +1,1090 @@
+Release "t80sat4-2" has been upgraded. Happy Helming!
+NAME: t80sat4-2
+LAST DEPLOYED: Mon Mar  3 15:42:35 2025
+NAMESPACE: ns-mbl-raid-fm
+STATUS: pending-upgrade
+REVISION: 15
+USER-SUPPLIED VALUES:
+automountServiceAccountToken: false
+cacerts:
+  configmap: cert-cfg-2
+customPodLabels:
+  cnf_id: 79b63e72-4153-420c-a320-d65072a5c018
+  cnfc_id: 05f26536-9c53-7c7a98f1ecf7Fromsat4-12345
+  ns_id: 144359a9-4da8-4867-8600-febf2407ab42
+dataPersistence:
+  enabled: false
+deployment:
+  base-dir: s3://fms-working-new/fms-stagging-env04
+  ha: false
+  license:
+    secretName: raid-license
+  name: t80sat4-2
+  productConfig:
+    secretName: t80sat4-2-product-config
+  replicas: 1
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "1"
+      memory: 1Gi
+  waitOnFailure: true
+image:
+  registry: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence
+  repository: aip/rafm-8.2.7
+  tag: 2.2.0
+permissions:
+  common: null
+  deployment:
+  - /local
+persistence:
+  common: null
+  deployment:
+  - claimTemplate:
+      accessModes:
+      - ReadWriteOnce
+      annotations:
+        helm.sh/hook: pre-install
+        helm.sh/hook-delete-policy: before-hook-creations
+        helm.sh/hook-weight: "-9"
+      size: 1G
+      storageClass: robin
+      volumeName: null
+    enabled: true
+    mounts:
+    - mountPath: /local
+    name: local
+process:
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 6Gi
+    requests:
+      cpu: 2000m
+      memory: 1Gi
+riskDatabase:
+  createDatabase: false
+  databaseName: rakuten
+  deploymentName: postgresql-t80
+  externalPort: 30480
+  host: 172.20.128.3
+  namespace: t80-rafm
+  password: postgres
+  port: 5432
+  tablespaceName: raiddata
+  username: postgres
+  version: --version 11.9.13
+riskProduct:
+  adjustPVCDeclaration: "false"
+  adjustaipinstall: "false"
+  aipChart: aip/charts/rafm-2.2.0.tgz
+  awsProfile: aip
+  helmInstallTimeout: 120m
+  helmUpgradeTimeout: 30m
+  installPresentation: true
+  license: common/support_files/license.lic
+  namespace: ns-mbl-raid-fm
+  openShiftDeploy: false
+  openShiftSettingsFile: common/aip_settings/openshift-settings.yaml
+  podStartTimeout: 20
+  productConfig:
+    fileName: product-config.xml
+  server: common/aip_settings/resources/SSmall-M4-8G.yaml
+  storageGcSettingsFile: common/aip_settings/google-cloud-storage-settings.yaml
+  storageS3SettingsFile: common/aip_settings/aws-s3-storage-settings.yaml
+setup:
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 6Gi
+    requests:
+      cpu: 2000m
+      memory: 1Gi
+storage:
+  access-key-id: 0RWMVOG95K7DJ5RK4IGP
+  credentials-type: static
+  endpoint: https://datalake-staging.rmnkiba.local
+  region: ""
+  s3:
+    access-key-id: 0RWMVOG95K7DJ5RK4IGP
+    credentials-type: static
+    endpoint: https://datalake-staging.rmnkiba.local
+    region: ""
+    secret-access-key: Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS
+  secret-access-key: Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS
+  type: s3
+timezone: Asia/Tokyo
+tolerations:
+- effect: NoSchedule
+  key: node
+  operator: Equal
+  value: FMS
+volumePermissions:
+  image:
+    repository: base/base
+    tag: 0.4.1
+
+COMPUTED VALUES:
+aip-common:
+  autoscaling:
+    behaviors:
+      enabled: true
+      scaleDown:
+        enabled: true
+        percent:
+          enabled: true
+          period: 15
+          value: 100
+        pods:
+          enabled: true
+          period: 15
+          value: 4
+        selectPolicy: Max
+        stabilizationWindow: 50
+      scaleUp:
+        enabled: true
+        percent:
+          enabled: true
+          period: 15
+          value: 100
+        pods:
+          enabled: true
+          period: 15
+          value: 4
+        selectPolicy: Max
+        stabilizationWindow: 50
+    enabled: true
+    kind: Deployment
+    maxReplicas: 6
+    metrics:
+      cpuPercent: 70
+      custom:
+      - resource:
+          name: network
+          targetAverageUtilization: 99
+        type: Resource
+      memoryPercent: 90
+    minReplicas: 3
+  global:
+    annotations: {}
+    envs: {}
+    fullname: ""
+    labels: {}
+    name: ""
+  image:
+    registry: ""
+    repository: ""
+    tag: 0.5.1
+  nodeAffinity:
+    rules:
+    - expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+      weight: 1
+    terms:
+      expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+    type: hard
+  podAffinity:
+    rules:
+    - expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+      labels:
+        a: b
+        c: d
+      weight: 1
+    selectors:
+    - expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+      labels:
+        a: b
+        c: d
+    type: hard
+  podAntiAffinity:
+    rules:
+    - expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+      labels:
+        a: b
+        c: d
+      weight: 1
+    selectors:
+    - expressions:
+      - key: myKey
+        operator: myOperator
+        values:
+        - a
+        - b
+      labels:
+        a: b
+        c: d
+    type: hard
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 250m
+      memory: 64Mi
+  tls:
+    configmap:
+      name: configmap
+    enabled: true
+    secret:
+      name: secret
+      path: /path/to/file.crt
+automountServiceAccountToken: false
+caTrustStore:
+  configmapName: ""
+  secretName: ""
+cacerts:
+  configmap: cert-cfg-2
+  keystoreAlias: ""
+  keystorePassword: ""
+  secret: ""
+cleanupNodeAffinity: null
+cleanupPodAffinity: null
+cleanupPodAntiAffinity: null
+containerSecurityContext:
+  enabled: false
+customJobLabels: {}
+customPodLabels:
+  cnf_id: 79b63e72-4153-420c-a320-d65072a5c018
+  cnfc_id: 05f26536-9c53-7c7a98f1ecf7Fromsat4-12345
+  ns_id: 144359a9-4da8-4867-8600-febf2407ab42
+dataPersistence:
+  accessModes:
+  - ReadWriteOnce
+  enabled: false
+  existingClaim: null
+  size: 1G
+  storageClass: null
+  volumeName: null
+deployment:
+  auditLogLevel: debug
+  base-dir: s3://fms-working-new/fms-stagging-env04
+  datamodelLogLevel: info
+  datastoreLogLevel: info
+  domain: null
+  ha: false
+  hkLogLevel: debug
+  interactive-setup: false
+  license:
+    secretName: raid-license
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 120
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 30
+  lmLogLevel: info
+  logLevel: info
+  mode: null
+  name: t80sat4-2
+  productConfig:
+    secretName: t80sat4-2-product-config
+  readinessProbe:
+    failureThreshold: 5
+    initialDelaySeconds: 120
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 30
+  replicas: 1
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "1"
+      memory: 1Gi
+  rootLogLevel: error
+  runLevel: null
+  smartTransformLogLevel: info
+  waitOnFailure: true
+  waitOnFailureTimeout: 60m
+  wpkgLegacyMode: null
+  wpkgLogLevel: debug
+  wsLogLevel: info
+  xdtPort: 40353
+image:
+  pullPolicy: IfNotPresent
+  registry: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence
+  repository: aip/rafm-8.2.7
+  tag: 2.2.0
+logPersistence:
+  accessModes:
+  - ReadWriteOnce
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-9"
+  enabled: false
+  existingClaim: null
+  name: t80sat4-2-rafm-logs
+  size: 1G
+  storageClass: null
+  volumeName: null
+nodeAffinity: null
+permissions:
+  common: null
+  deployment:
+  - /local
+persistence:
+  common: null
+  deployment:
+  - claimTemplate:
+      accessModes:
+      - ReadWriteOnce
+      annotations:
+        helm.sh/hook: pre-install
+        helm.sh/hook-delete-policy: before-hook-creations
+        helm.sh/hook-weight: "-9"
+      size: 1G
+      storageClass: robin
+      volumeName: null
+    enabled: true
+    mounts:
+    - mountPath: /local
+    name: local
+podAffinity: null
+podAntiAffinity: null
+podSecurityContext:
+  enabled: false
+process:
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 6Gi
+    requests:
+      cpu: 2000m
+      memory: 1Gi
+processImage:
+  pullPolicy: null
+  registry: null
+  repository: null
+  tag: null
+processNodeAffinity: null
+processPodAffinity: null
+processPodAntiAffinity: null
+registry:
+  host: registry
+  port: 8080
+riskDatabase:
+  createDatabase: false
+  databaseName: rakuten
+  deploymentName: postgresql-t80
+  externalPort: 30480
+  host: 172.20.128.3
+  namespace: t80-rafm
+  password: postgres
+  port: 5432
+  tablespaceName: raiddata
+  username: postgres
+  version: --version 11.9.13
+riskProduct:
+  adjustPVCDeclaration: "false"
+  adjustaipinstall: "false"
+  aipChart: aip/charts/rafm-2.2.0.tgz
+  awsProfile: aip
+  helmInstallTimeout: 120m
+  helmUpgradeTimeout: 30m
+  installPresentation: true
+  license: common/support_files/license.lic
+  namespace: ns-mbl-raid-fm
+  openShiftDeploy: false
+  openShiftSettingsFile: common/aip_settings/openshift-settings.yaml
+  podStartTimeout: 20
+  productConfig:
+    fileName: product-config.xml
+  server: common/aip_settings/resources/SSmall-M4-8G.yaml
+  storageGcSettingsFile: common/aip_settings/google-cloud-storage-settings.yaml
+  storageS3SettingsFile: common/aip_settings/aws-s3-storage-settings.yaml
+service:
+  type: ClusterIP
+  xdtPort: 40353
+setup:
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 6Gi
+    requests:
+      cpu: 2000m
+      memory: 1Gi
+skipSetup: false
+storage:
+  access-key-id: 0RWMVOG95K7DJ5RK4IGP
+  credentials-type: static
+  endpoint: https://datalake-staging.rmnkiba.local
+  gs:
+    service-account:
+      configmapName: null
+      secretName: null
+  hdfs:
+    authentication:
+      kerberos:
+        conf:
+          configmapName: null
+          secretName: null
+        keytab:
+          configmapName: null
+          secretName: null
+        principal: null
+      type: null
+    configmapName: null
+    secretName: null
+    user: null
+  region: ""
+  s3:
+    access-key-id: 0RWMVOG95K7DJ5RK4IGP
+    credentials-type: static
+    endpoint: https://datalake-staging.rmnkiba.local
+    region: ""
+    secret-access-key: Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS
+    signatureVersion: s3v4
+  secret-access-key: Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS
+  type: s3
+timezone: Asia/Tokyo
+tolerations:
+- effect: NoSchedule
+  key: node
+  operator: Equal
+  value: FMS
+vault:
+  role: ""
+  type: NONE
+  url: ""
+volumePermissions:
+  image:
+    pullPolicy: IfNotPresent
+    registry: null
+    repository: base/base
+    tag: 0.4.1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  securityContext:
+    runAsUser: 0
+
+HOOKS:
+---
+# Source: rafm/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: t80sat4-2-rafm-secrets
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+stringData:
+    AWS_ACCESS_KEY_ID: 0RWMVOG95K7DJ5RK4IGP
+    AWS_SECRET_ACCESS_KEY: Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS
+---
+# Source: rafm/templates/configmap.yaml
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: t80sat4-2-rafm-configmap
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+data:
+  DEPLOYMENT_NAME: t80sat4-2
+  DEPLOYMENT_BASE_DIR: 's3://fms-working-new/fms-stagging-env04'
+  DEPLOYMENT_UPLOAD_TARGET: ''
+  INTERACTIVE_MODE_FLAG: 'false'
+  STORAGE_TYPE: "s3"
+  AWS_ENDPOINT: https://datalake-staging.rmnkiba.local
+  WAIT_ON_FAILURE_TIMEOUT: 60m
+  SERVER_LOG_LEVEL: "info"
+  AUDIT_LOG_LEVEL: "debug"
+  LM_LOG_LEVEL: "info"
+  DATAMODEL_LOG_LEVEL: "info"
+  DATASTORE_LOG_LEVEL: "info"
+  SMARTTRANSFORM_LOG_LEVEL: "info"
+  HK_LOG_LEVEL: "debug"
+  WS_LOG_LEVEL: "info"
+  SERVER_ROOT_LOG_LEVEL: "error"
+  WPKG_LOG_LEVEL: "debug"
+  LOG_PERSISTENCE: "false"
+  WPKG_CLOUD_MODE: "true"
+  LIVENESS_PORT: "40353"
+  AIP_REGISTRY_ENDPOINT: registry:8080
+  WPKG_LEGACY_MODE: "false"
+---
+# Source: rafm/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: t80sat4-2-rafm-connection-test
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    helm.sh/hook: test
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: connection-test
+      image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/aip/rafm-8.2.7:2.2.0
+      imagePullPolicy: IfNotPresent
+      terminationMessagePolicy: FallbackToLogsOnError
+      command: ["wget"]
+      args:
+        - --no-check-certificate
+        - --tries=5
+        - t80sat4-2:40353/healthz
+---
+# Source: rafm/templates/cleanup.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: t80sat4-2-rafm-cleanup
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rafm
+        app.kubernetes.io/instance: t80sat4-2-rafm
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      affinity:
+        nodeAffinity:
+          
+        podAffinity:
+          
+        podAntiAffinity:
+          
+      initContainers:
+        - name: volume-permissions
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/base/base:0.4.1
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/opt/extension/process"
+              mkdir -p "/opt/extension/data"
+              chown -R "1001:0" "/opt/extension/data"
+          securityContext:
+            runAsUser: 0
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 200m
+          volumeMounts:
+            - name: data
+              mountPath: /opt/extension/data
+      containers:
+        - envFrom:
+            - secretRef:
+                name: t80sat4-2-rafm-secrets
+            - configMapRef:
+                name: t80sat4-2-rafm-configmap
+          env:
+            - name: TZ
+              value: "Asia/Tokyo"
+            - name: DEPLOYMENT_MODE
+              value: "cleanup"
+          name: t80sat4-2-rafm-cleanup
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/aip/rafm-8.2.7:2.2.0
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 2000m
+            limits:
+              memory: 6Gi
+              cpu: 4000m
+          livenessProbe:
+            exec:
+              command:
+                - echo
+                - "dummy"
+          readinessProbe:
+            exec:
+              command:
+                - echo
+                - "dummy"
+          volumeMounts:
+            - name: data
+              mountPath: /opt/extension/data
+            - name: license
+              mountPath: /opt/extension/process/license.lic
+              subPath: license.lic
+            - name: product-config
+              mountPath: /opt/extension/process/product-config.xml
+              subPath: product-config.xml
+            - name: cert-cfg
+              mountPath: /etc/pki/ca-trust/extracted/java/
+              readOnly: true
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: license
+          secret:
+            secretName: raid-license
+            items:
+            - key: license.lic
+              path: license.lic
+        - name: product-config
+          secret:
+            secretName: t80sat4-2-product-config
+            items:
+            - key: product-config.xml
+              path: product-config.xml
+        - name: cert-cfg
+          configMap:
+            name: cert-cfg-2
+---
+# Source: rafm/templates/process.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: t80sat4-2-rafm-process
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rafm
+        app.kubernetes.io/instance: t80sat4-2-rafm
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      affinity:
+        nodeAffinity:
+          
+        podAffinity:
+          
+        podAntiAffinity:
+          
+      initContainers:
+        - name: volume-permissions
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/base/base:0.4.1
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          command:
+            - sh
+            - -c
+            - |
+              chown -R "1001:0" "/opt/extension/data"
+              chown -R "1001:0" "/opt/logs"
+          securityContext:
+            runAsUser: 0
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 200m
+          volumeMounts:
+            - name: data
+              mountPath: /opt/extension/data
+            - name: logs
+              mountPath: /opt/logs
+      containers:
+        - envFrom:
+            - secretRef:
+                name: t80sat4-2-rafm-secrets
+            - configMapRef:
+                name: t80sat4-2-rafm-configmap
+          env:
+            - name: TZ
+              value: "Asia/Tokyo"
+            - name: LOG_PERSISTENCE
+              value: "false"
+          name: t80sat4-2-rafm-process
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/aip/rafm-8.2.7:2.2.0
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 2000m
+            limits:
+              memory: 6Gi
+              cpu: 4000m
+          livenessProbe:
+            exec:
+              command:
+                - echo
+                - "dummy"
+          readinessProbe:
+            exec:
+              command:
+                - echo
+                - "dummy"
+          volumeMounts:
+            - name: data
+              mountPath: /opt/extension/data
+            - name: logs
+              mountPath: /opt/logs
+            - name: license
+              mountPath: /opt/extension/process/license.lic
+              subPath: license.lic
+            - name: product-config
+              mountPath: /opt/extension/process/product-config.xml
+              subPath: product-config.xml
+            - name: cert-cfg
+              mountPath: /etc/pki/ca-trust/extracted/java/
+              readOnly: true
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: logs
+          emptyDir: {}
+        - name: license
+          secret:
+            secretName: raid-license
+            items:
+            - key: license.lic
+              path: license.lic
+        - name: product-config
+          secret:
+            secretName: t80sat4-2-product-config
+            items:
+            - key: product-config.xml
+              path: product-config.xml
+        - name: hdfs
+          emptyDir: {}
+        - name: kerberos
+          emptyDir: {}
+        - name: conf
+          emptyDir: {}
+        - name: cert-cfg
+          configMap:
+            name: cert-cfg-2
+        - name: gcs-service-account
+          emptyDir: {}
+MANIFEST:
+---
+# Source: rafm/templates/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: t80sat4-2-rafm-pdb
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rafm
+      app.kubernetes.io/instance: t80sat4-2-rafm
+---
+# Source: rafm/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: t80sat4-2
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+spec:
+  ports:
+    - name: http
+      port: 40353
+      targetPort: 40353
+  selector:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+  sessionAffinity: ClientIP
+  type: ClusterIP
+---
+# Source: rafm/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: t80sat4-2-rafm
+  labels:
+    app.kubernetes.io/name: rafm
+    app.kubernetes.io/instance: t80sat4-2-rafm
+    app.kubernetes.io/version: "2.2.0"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+    helm.sh/chart: rafm-2.2.0
+  annotations:
+    app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+    app.aip/deployment-epoch: "1741016555"
+    app.aip/owner: "AIP_Active-Intelligence-Platform"
+    app.aip/operation: "Upgrade or Rollback"
+    app.aip/revision: "15"
+spec:
+  replicas: 1
+  serviceName: rafm
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rafm
+      app.kubernetes.io/instance: t80sat4-2-rafm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rafm
+        app.kubernetes.io/instance: t80sat4-2-rafm
+        cnf_id: 79b63e72-4153-420c-a320-d65072a5c018
+        cnfc_id: 05f26536-9c53-7c7a98f1ecf7Fromsat4-12345
+        ns_id: 144359a9-4da8-4867-8600-febf2407ab42
+    spec:
+      automountServiceAccountToken: false
+      affinity:
+        nodeAffinity:
+          
+        podAffinity:
+          
+        podAntiAffinity:
+          
+      initContainers:
+        - name: volume-permissions
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/base/base:0.4.1
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          command:
+            - sh
+            - -c
+            - |
+              chown -R "1001:0" "/opt/extension/data"              
+              chown -R "1001:0" "/local"
+          securityContext:
+            runAsUser: 0
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 200m
+          volumeMounts:
+            
+            - name: local
+              mountPath: /local
+            - name: data
+              mountPath: /opt/extension/data
+      containers:
+        - envFrom:
+            - secretRef:
+                name: t80sat4-2-rafm-secrets
+            - configMapRef:
+                name: t80sat4-2-rafm-configmap
+          env:
+            - name: TZ
+              value: "Asia/Tokyo"
+            - name: DEPLOYMENT_MODE
+              value: "startup"
+          image: klstg-docker.slb-wartifactory-v.stg.rmn.local/mobileum/network-fraud-intelligence/aip/rafm-8.2.7:2.2.0
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 2
+          volumeMounts:
+            
+            - name: local
+              mountPath: /local
+            - name: data
+              mountPath: /opt/extension/data
+            - name: license
+              mountPath: /opt/extension/process/license.lic
+              subPath: license.lic
+            - name: product-config
+              mountPath: /opt/extension/process/product-config.xml
+              subPath: product-config.xml
+            - name: cert-cfg
+              mountPath: /etc/pki/ca-trust/extracted/java/
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 40353
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 60
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 3
+          name: t80sat4-2-rafm
+          ports:
+            - containerPort: 40353
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 40353
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 60
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
+      volumes:
+        
+        - name: data
+          emptyDir: {}
+        - name: license
+          secret:
+            secretName: raid-license
+            items:
+            - key: license.lic
+              path: license.lic
+        - name: product-config
+          secret:
+            secretName: t80sat4-2-product-config
+            items:
+            - key: product-config.xml
+              path: product-config.xml
+        - name: hdfs
+          emptyDir: {}
+        - name: kerberos
+          emptyDir: {}
+        - name: conf
+          emptyDir: {}
+        - name: cert-cfg
+          configMap:
+            name: cert-cfg-2
+        - name: gcs-service-account
+          emptyDir: {}
+  volumeClaimTemplates:
+    
+    - metadata: 
+        name: local
+        labels:
+            app.kubernetes.io/name: rafm
+            app.kubernetes.io/instance: t80sat4-2-rafm
+            app.kubernetes.io/version: "2.2.0"
+            app.kubernetes.io/managed-by: "Helm"
+            app.kubernetes.io/part-of: "AIP_Active-Intelligence-Platform"
+            helm.sh/chart: rafm-2.2.0
+        annotations:
+            app.aip/deployment-time: "2025-03-03T15:42:35+0000"
+            app.aip/deployment-epoch: "1741016555"
+            app.aip/owner: "AIP_Active-Intelligence-Platform"
+            app.aip/operation: "Upgrade or Rollback"
+            app.aip/revision: "15"
+            helm.sh/hook: pre-install
+            helm.sh/hook-delete-policy: before-hook-creations
+            helm.sh/hook-weight: "-9"
+      spec: 
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1G"
+        storageClassName: robin
+

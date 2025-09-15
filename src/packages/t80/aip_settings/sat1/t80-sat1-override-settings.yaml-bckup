@@ -1,0 +1,42 @@
+############
+# AIP 2.0.2 compatible
+############
+
+deployment:
+  name: "fms-loading-sat1-rafm"
+  #name: "loading-t80fm"
+  ha: false
+  replicas: 1
+  productConfig:
+    secretName: "fms-loading-sat1-rafm-product-config"
+
+persistence:
+  common:
+  deployment:
+    - enabled: true
+      name: local
+      mounts:
+        - mountPath: /local
+      claim:
+        accessModes:
+          - ReadWriteOnce
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+
+customPodLabels:
+  cnfc_id: 2e0dd752-9eb4-43b5-8e62-2e203873281e
+
+permissions:
+  common:
+  deployment:
+    - /local
+    - /fms-loading
+
+riskProduct:
+  server: "common/aip_settings/resources/t80-sat1-resources.yaml"
+

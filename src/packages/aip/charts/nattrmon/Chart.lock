@@ -1,0 +1,6 @@
+dependencies:
+- name: aip-common
+  repository: oci://162015117822.dkr.ecr.eu-west-1.amazonaws.com/aip-charts
+  version: 0.13.1
+digest: sha256:6db26f34dac7c82a97a09fa58930bd443ef82e46b529830e95e489be63a55840
+generated: "2025-02-26T14:49:17.584022662Z"

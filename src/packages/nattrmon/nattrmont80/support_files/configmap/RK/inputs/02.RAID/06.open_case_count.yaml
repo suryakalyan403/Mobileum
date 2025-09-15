@@ -1,0 +1,14 @@
+input:
+   name         : Open Cases Count retrieved from the database 
+   #cron         : "*/9 * * * * *"
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 1560000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Open Cases Count  : >
+                select count(1) as open_cases_count from acm_t_case where status in ('1','2') 

@@ -1,0 +1,297 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "aip.names.fullname" . }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  serviceName: {{ include "aip.names.name" . }}
+  selector:
+    matchLabels: {{- include "aip.labels.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "aip.labels.matchLabels" . | nindent 8 }}
+        {{- if .Values.customPodLabels }}
+          {{- include "aip.renderer" ( dict "value" .Values.customPodLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if or (eq .Values.deployment.safeToEvict false) }}
+          cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+        {{- end }}
+        {{- if .Values.customPodAnnotations }}
+          {{- include "aip.renderer" ( dict "value" .Values.customPodAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+    spec:
+      tolerations: {{- include "aip.names.tolerations" . | nindent 8 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- .Values.hostAliases | toYaml | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken | default false }}
+      affinity:
+        nodeAffinity: {{- include "aip.affinities.nodes" .Values.nodeAffinity | nindent 10 }}
+        podAffinity: {{- include "aip.affinities.pods" .Values.podAffinity | nindent 10 }}
+        podAntiAffinity: {{- include "aip.affinities.pods" .Values.podAntiAffinity | nindent 10 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- include "aip.images.imagePullSecrets" ( dict "pullSecrets" .Values.image.pullSecrets) | nindent 6 }}
+      initContainers:
+        - name: volume-permissions
+          image: {{ include "aip.images.image" ( dict "image" .Values.volumePermissions.image "default" .Values.image )}}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | default .Values.image.pullPolicy }}
+          terminationMessagePolicy: FallbackToLogsOnError
+          command:
+            - sh
+            - -c
+            - |
+              {{- if ne ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown "1001:0" "/opt/extension/data"
+              {{- $permissions := .Values.permissions | default dict }}
+              {{- if $permissions.common }}
+              {{- include "aip.volumes.permissions" .Values.permissions.common | indent 14 }}
+              {{- end }}
+              {{- if $permissions.deployment }}
+              {{- include "aip.volumes.permissions" .Values.permissions.deployment | indent 14 }}
+              {{- end }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
+          {{- end }}
+          resources: {{ include "aip.resources.requests" ( dict "resources" .Values.volumePermissions.resources "context" $ ) | nindent 12 }}
+          volumeMounts:
+            {{- $persistence := .Values.persistence | default dict }}
+            {{- if $persistence.common }}
+            {{- include "aip.volumes.mounts" ( dict "persistence" .Values.persistence.common "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if $persistence.deployment }}
+            {{- include "aip.volumes.mounts" ( dict "persistence" .Values.persistence.deployment "context" $ ) | nindent 12 }}
+            {{- end }}
+            - name: data
+              mountPath: /opt/extension/data
+      containers:
+        - envFrom:
+          {{- if eq .Values.storage.type "s3" }}
+            {{- if eq ( index .Values.storage.s3 "credentials-type") "static" }}
+            - secretRef:
+                name: {{ include "aip.names.fullname" . }}-secrets
+            {{- end }}
+          {{- end }}
+            - configMapRef:
+                name: {{ include "aip.names.fullname" . }}-configmap
+          env: {{- include "aip.env.standard" . | nindent 12 }}
+            - name: DEPLOYMENT_MODE
+              value: "startup"
+            {{- if eq .Values.deployment.ha true }}
+            - name: STATIC_INSTANCE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- end }}
+            {{- if .Values.cacerts.keystorePassword }}
+            - name: KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cacerts.keystorePassword }}
+                  key: password
+            {{- end }}
+            {{- if .Values.cacerts.keystoreAlias }}
+            - name: KEYSTORE_ALIAS
+              value: {{ .Values.cacerts.keystoreAlias }}
+            {{- end }}
+          {{- if and (eq .Values.storage.type "s3") .Values.storage.s3.secretName }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.storage.s3.secretName }}
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.storage.s3.secretName }}
+                  key: AWS_SECRET_ACCESS_KEY
+          {{- end }}
+          image: {{ include "aip.images.image" ( dict "image" .Values.image )}}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          terminationMessagePolicy: FallbackToLogsOnError
+          resources: {{ include "aip.resources.requests" ( dict "resources" .Values.deployment.resources "context" $ ) | nindent 12 }}
+          volumeMounts:
+            {{- if $persistence.common }}
+            {{- include "aip.volumes.mounts" ( dict "persistence" .Values.persistence.common "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if $persistence.deployment }}
+            {{- include "aip.volumes.mounts" ( dict "persistence" .Values.persistence.deployment "context" $ ) | nindent 12 }}
+            {{- end }}
+            - name: data
+              mountPath: /opt/extension/data
+            {{- if .Values.deployment.license.secretName }}
+            - name: license
+              mountPath: /opt/extension/process/license.lic
+              subPath: license.lic
+            {{- end }}
+            {{- if .Values.deployment.productConfig.secretName }}
+            - name: product-config
+              mountPath: /opt/extension/process/product-config.xml
+              subPath: product-config.xml
+            {{- end }}
+            {{- if and (or (.Values.storage.hdfs.secretName) (.Values.storage.hdfs.configmapName)) (eq .Values.storage.type "hdfs") }}
+            - name: hdfs
+              mountPath: /etc/hadoop/conf/
+            {{- if eq .Values.storage.hdfs.authentication.type "kerberos"}}
+            - name: kerberos
+              mountPath: /etc/hadoop/kerberos/
+            - name: conf
+              mountPath: /etc/krb5.conf
+              subPath: krb5.conf
+             {{- end }}
+            {{- end }}
+            {{- if or (ne .Values.cacerts.configmap "") (ne .Values.cacerts.secret "") }}
+            - name: cert-cfg
+              mountPath: /etc/pki/ca-trust/extracted/java/
+              readOnly: true
+            {{- end }}
+            {{- if and (eq .Values.storage.type "gs") (index .Values.storage.gs "service-account" "secretName") }}
+            - name: gcs-service-account
+              mountPath: /etc/gcs/service-account.json
+              subPath: service-account.json
+            {{- end }}
+            {{- if and (eq .Values.storage.type "s3") (or (index .Values.storage.s3 "credentials-file" "secretName") (index .Values.storage.s3 "credentials-file" "configmapName")) }}
+            - name: s3-credentials
+              mountPath: /.aws/credentials
+              subPath: credentials
+            {{- end }}
+            {{- include "aip.volumes.mount.catrust" ( dict "caTrust" .Values.caTrust) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.deployment.xdtPort }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          name: {{ include "aip.names.fullname" . }}
+          ports:
+            - containerPort: {{ .Values.deployment.xdtPort }}
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: {{ .Values.deployment.xdtPort }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+      volumes:
+        {{- if $persistence.common }}
+        {{- include "aip.volumes" ( dict "persistence" .Values.persistence.common "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if $persistence.deployment }}
+        {{- include "aip.volumes" ( dict "persistence" .Values.persistence.deployment "context" $ ) | nindent 8 }}
+        {{- end }}
+        - name: data
+          {{- if .Values.dataPersistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.dataPersistence.existingClaim | default (printf "%s-data" (include "aip.names.fullname" .)) | quote}}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.deployment.license.secretName }}
+        - name: license
+          secret:
+            secretName: {{ .Values.deployment.license.secretName }}
+            items:
+            - key: license.lic
+              path: license.lic
+        {{- end }}
+        {{- if .Values.deployment.productConfig.secretName }}
+        - name: product-config
+          secret:
+            secretName: {{ .Values.deployment.productConfig.secretName }}
+            items:
+            - key: product-config.xml
+              path: product-config.xml
+        {{- end }}
+        - name: hdfs {{- if and (or (.Values.storage.hdfs.secretName) (.Values.storage.hdfs.configmapName)) (eq .Values.storage.type "hdfs") }}
+          {{- if .Values.storage.hdfs.secretName }}
+          secret:
+            secretName: {{ .Values.storage.hdfs.secretName }}
+          {{- else if .Values.storage.hdfs.configmapName }}
+          configMap:
+            name: {{ .Values.storage.hdfs.configmapName }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: kerberos {{- if and (eq .Values.storage.type "hdfs") (eq .Values.storage.hdfs.authentication.type "kerberos") }}
+          {{- if .Values.storage.hdfs.authentication.kerberos.keytab.secretName }}
+          secret:
+            secretName: {{ .Values.storage.hdfs.authentication.kerberos.keytab.secretName }}
+          {{- else if .Values.storage.hdfs.authentication.kerberos.keytab.configmapName }}
+          configMap:
+            name: {{ .Values.storage.hdfs.authentication.kerberos.keytab.configmapName }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: conf {{- if and (eq .Values.storage.type "hdfs") (eq .Values.storage.hdfs.authentication.type "kerberos") }}
+          {{- if .Values.storage.hdfs.authentication.kerberos.conf.secretName }}
+          secret:
+            secretName: {{ .Values.storage.hdfs.authentication.kerberos.conf.secretName }}
+          {{- else if .Values.storage.hdfs.authentication.kerberos.conf.configmapName }}
+          configMap:
+            name: {{ .Values.storage.hdfs.authentication.kerberos.conf.configmapName }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if or (ne .Values.cacerts.configmap "") (ne .Values.cacerts.secret "") }}
+        - name: cert-cfg
+          {{- if ne .Values.cacerts.configmap "" }}
+          configMap:
+            name: {{ .Values.cacerts.configmap }}
+          {{- else if ne .Values.cacerts.secret "" }}
+          secret:
+            secretName: {{ .Values.cacerts.secret }}
+            items:
+              - key: cacerts
+                path: cacerts
+          {{- end }}
+        {{- end }}
+        - name: gcs-service-account {{- if eq .Values.storage.type "gs" }}
+          {{- if (index .Values.storage.gs "service-account" "secretName") }}
+          secret:
+            secretName: {{ index .Values.storage.gs "service-account" "secretName" }}
+          {{- else if index .Values.storage.gs "service-account" "configmapName" }}
+          configMap:
+            name: {{ index .Values.storage.gs "service-account" "configmapName" }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: s3-credentials {{- if eq .Values.storage.type "s3" }}
+          {{- if (index .Values.storage.s3 "credentials-file" "secretName") }}
+          secret:
+            secretName: {{ index .Values.storage.s3 "credentials-file" "secretName" }}
+          {{- else if index .Values.storage.s3 "credentials-file" "configmapName" }}
+          configMap:
+            name: {{ index .Values.storage.s3 "credentials-file" "configmapName" }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- include "aip.volumes.catrust" ( dict "caTrust" .Values.caTrust) | nindent 8 }}
+  {{- if $persistence.deployment }}
+  volumeClaimTemplates:
+    {{- include "aip.volumes.templates" ( dict "persistence" .Values.persistence.deployment "context" $ ) | nindent 4 }}
+  {{- end }}

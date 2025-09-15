@@ -1,0 +1,282 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "automountServiceAccountToken": {
+            "type": "boolean"
+        },
+        "buildEnvs": {
+            "type": "object",
+            "properties": {
+                "JAVA_OPTS": {
+                    "type": "string"
+                }
+            }
+        },
+        "cache": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "contextPath": {
+                    "type": "string"
+                },
+                "defaultTheme": {
+                    "type": "string"
+                },
+                "keycloak_password": {
+                    "type": "string"
+                },
+                "keycloak_user": {
+                    "type": "string"
+                },
+                "log": {
+                    "type": "object",
+                    "properties": {
+                        "format": {
+                            "type": "string"
+                        },
+                        "level": {
+                            "type": "string"
+                        },
+                        "options": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "replica_count": {
+                    "type": "integer"
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "customPodLabels": {
+            "type": "object"
+        },
+        "db": {
+            "type": "object",
+            "properties": {
+                "database_url": {
+                    "type": "string"
+                },
+                "database_vendor": {
+                    "type": "string"
+                },
+                "dbMigration": {
+                    "type": "boolean"
+                },
+                "db_host": {
+                    "type": "string"
+                },
+                "db_name": {
+                    "type": "string"
+                },
+                "db_password": {
+                    "type": "string"
+                },
+                "db_port": {
+                    "type": "string"
+                },
+                "db_username": {
+                    "type": "string"
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "registry": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "logPersistence": {
+            "type": "object",
+            "properties": {
+                "accessModes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "existingClaim": {
+                    "type": "null"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "storageClass": {
+                    "type": "null"
+                },
+                "volumeName": {
+                    "type": "null"
+                }
+            }
+        },
+        "nodeAffinity": {
+            "type": "object"
+        },
+        "podAffinity": {
+            "type": "object"
+        },
+        "podAntiAffinity": {
+            "type": "object"
+        },
+        "preAnnotation": {
+            "type": "object",
+            "properties": {
+                "helm.sh/hook": {
+                    "type": "string"
+                },
+                "helm.sh/hook-delete-policy": {
+                    "type": "string"
+                },
+                "helm.sh/hook-weight": {
+                    "type": "string"
+                }
+            }
+        },
+        "probe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": {
+                    "type": "integer"
+                },
+                "initialDelaySeconds": {
+                    "type": "integer"
+                },
+                "periodSeconds": {
+                    "type": "integer"
+                },
+                "successThreshold": {
+                    "type": "integer"
+                },
+                "timeoutSeconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "realm": {
+            "type": "object"
+        },
+        "realmImport": {
+            "type": "object",
+            "properties": {
+                "configmap": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "annotation": {
+                    "type": "object"
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "nodePort": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "testAnnotation": {
+            "type": "object",
+            "properties": {
+                "helm.sh/hook": {
+                    "type": "string"
+                },
+                "helm.sh/hook-delete-policy": {
+                    "type": "string"
+                }
+            }
+        },
+        "tls": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "selfSigned": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "userDefined": {
+                    "type": "object",
+                    "properties": {
+                        "configmap": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "secret": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+############
+# AIP 2.0.2 compatible
+############
+
+deployment:
+  name: "fms-correlation-sat3"
+  ha: false
+  replicas: 1
+  productConfig:
+    secretName: "fms-correlation-sat3-rafm-product-config"
+
+persistence:
+  common:
+  deployment:
+    - enabled: true
+      name: local
+      mounts:
+        - mountPath: /local
+      claim:
+        accessModes:
+          - ReadWriteOnce
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+
+          
+customPodLabels:
+  cnfc_id: 05f26536-75b6-445e-9c53-7c7a98f1ecf7
+
+permissions:
+  common:
+  deployment:
+    - /local
+
+riskProduct:
+  server: "common/aip_settings/resources/t80-sat3-resources.yaml"

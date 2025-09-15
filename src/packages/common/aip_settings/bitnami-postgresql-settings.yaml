@@ -1,0 +1,23 @@
+#------------------------------------------------
+# Settings file required for bitnami PostgreSQL database deployment in case of
+# deplpoying in OpenShift cluster.
+# This is the default used file defined in openshift-settings.yaml
+# in the parameter riskDatabase.bitnamiPostgreSQLSettings
+#------------------------------------------------
+primary:
+  podSecurityContext:
+    fsGroup: null
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    runAsUser: null
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ['ALL']
+volumePermissions:
+  enabled: false
+shmVolume:
+  enabled: false

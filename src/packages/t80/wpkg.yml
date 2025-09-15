@@ -1,0 +1,30 @@
+#
+# Main script to deploy RAFM Module
+#
+name: T80 Module Deploy
+version: 3.10.0.830102
+
+
+goals:
+  
+   - name: deployPortal
+     steps:   
+     - description: "Deploy Portal Pages"
+       type: "COMMAND"
+       options:
+         command: "${WPKG_LOCATION}/bin/wpkg -v -b ${bundle_base_dir}/portal_upgrade/install/02-product-bundle/*tar.gz -c ${PORTAL_CONFIG_FILE} -p PathToPortalInstance ${PathToPortalInstance}"
+
+   - name: deployModule
+     default: true
+     steps:
+     - description: "Deploy RAFM Setup"
+       type: "COMMAND"
+       options:
+         command: "${WPKG_LOCATION}/bin/wpkg -v -b ${bundle_base_dir}/rafm_setup/install/02-product-bundle/*tar.gz -c ${config_file} -p PathToInstance ${PathToInstance} -p username ${username} -p password ${password}"
+
+   - name: deployML
+     steps:
+     - description: "Deploy ML"
+       type: "COMMAND"
+       options:
+         command: "${WPKG_LOCATION}/bin/wpkg -v -b ${bundle_base_dir}/ml/*ml.tar.gz -p ExtractToPath ${ExtractToPath} -c ${config_file}"

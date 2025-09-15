@@ -1,0 +1,40 @@
+{{- if .Values.tls.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "aip.names.fullname" . }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+    {{- if .Values.preAnnotation }}
+    {{- include "aip.renderer" ( dict "value" .Values.preAnnotation "context" $ ) | nindent 4 }}
+    {{- end }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "aip.names.fullname" . }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+    {{- if .Values.preAnnotation }}
+    {{- include "aip.renderer" ( dict "value" .Values.preAnnotation "context" $ ) | nindent 4 }}
+    {{- end }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+spec:
+  {{- if .Values.tls.url }}
+  commonName: {{ (split ":" .Values.tls.url)._1 | replace "//" "" }}
+  {{- else }}
+  commonName: localhost
+  {{- end }}
+  dnsNames:
+    {{- if .Values.tls.url }}
+    - {{ (split ":" .Values.tls.url)._1 | replace "//" "" }}
+    {{- else }}
+    - localhost
+    {{- end }}
+  secretName: {{ include "aip.names.fullname" . }}-tls-secret
+  issuerRef:
+    name: {{ include "aip.names.fullname" . }}
+  duration: 8760h
+  renewBefore: 360h
+{{- end }}

@@ -1,0 +1,101 @@
+######################
+#AIP 2.0.2 compatible
+############
+
+deployment:
+  name: "fms-detection-sat2"
+  waitOnFailure: true
+  ha: false
+  replicas: 1
+  productConfig:
+    secretName: "detection-t80-product-config"
+
+persistence:
+  common:
+  deployment:
+    - enabled: true
+      name: local
+      mounts:
+        - mountPath: /local
+      claim:
+        accessModes:
+          - ReadWriteOnce
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+
+    - enabled: true
+      name: fms-loading-sat1-rafm
+      mounts:
+        - mountPath: /fms-loading-sat1-rafm
+      claim:
+        accessModes:
+          - ReadWriteMany
+        size: 1500G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+          "robin.io/replication": "2"
+          "robin.io/faultdomain": host
+          "robin.io/compression": LZ4
+          "robin.io/media": SSD
+
+    - enabled: true
+      name: fms-detection-sat2-rafm   # fixed: sat2 for consistency
+      mounts:
+        - mountPath: /fms-detection-sat2-rafm
+      claim:
+        accessModes:
+          - ReadWriteMany
+        size: 300G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+          "robin.io/replication": "2"
+          "robin.io/faultdomain": host
+          "robin.io/compression": LZ4
+          "robin.io/media": SSD
+
+    - enabled: true
+      name: fms-correlation-sat3-rafm
+      mounts:
+        - mountPath: /fms-correlation-sat3-rafm
+      claim:
+        accessModes:
+          - ReadWriteMany
+        size: 30G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+          "robin.io/replication": "2"
+          "robin.io/faultdomain": host
+          "robin.io/compression": LZ4
+          "robin.io/media": SSD
+
+customPodLabels:
+  cnfc_id: 547589fd-dc10-403b-b41a-4dc3225dd932
+
+permissions:
+  common:
+  deployment:
+    - /local
+    - /fms-loading-sat1-rafm
+    - /fms-detection-sat2-rafm
+    - /fms-correlation-sat3-rafm
+
+riskProduct:
+  server: "common/aip_settings/resources/t80-sat2-resources.yaml"
+

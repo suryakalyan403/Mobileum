@@ -1,0 +1,41 @@
+############
+# AIP 2.0.2 compatible
+############
+
+deployment:
+  name: "fms-detection-sat2-rafm"
+  #name: "detection-t80"
+  waitOnFailure: true
+  ha: false
+  replicas: 1
+  productConfig:
+    secretName: "fms-detection-sat2-rafm-product-config"
+
+persistence:
+  common:
+  deployment:
+    - enabled: true
+      name: local
+      mounts:
+        - mountPath: /local
+      claim:
+        accessModes:
+          - ReadWriteOnce
+        size: 1G
+        storageClass: robin
+        volumeName:
+        annotations:
+          "helm.sh/hook": pre-install
+          "helm.sh/hook-weight": "-9"
+          "helm.sh/hook-delete-policy": before-hook-creations
+          
+customPodLabels:
+  cnfc_id: 547589fd-dc10-403b-b41a-4dc3225dd932
+
+permissions:
+  common:
+  deployment:
+    - /local
+
+riskProduct:
+  server: "common/aip_settings/resources/t80-sat2-resources.yaml"

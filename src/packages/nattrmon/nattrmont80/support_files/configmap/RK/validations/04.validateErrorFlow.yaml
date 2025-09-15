@@ -1,0 +1,13 @@
+validation:
+   name         : RAID Error flows validation
+   description  : Simple validation for flows on error - Error flows validation.
+   chSubscribe  : nattrmon::cvals
+   waitForFinish: false
+   execFrom     : nValidation_Generic
+   execArgs     :
+      checks:
+         - attrPattern      : "RAID/CBPM error flow instances"
+           expr             : "'{{value.Status}}' == 'ERROR'"
+           warnLevel        : HIGH
+           warnTitleTemplate: "Flow {{value.Flow}} - ({{value.Name}})"
+           warnDescTemplate : "The flow {{value.Flow}} - ({{value.Name}}) ended in error on {{value.[End Date]}} with run id {{value.[Run ID]}}. The exception was: '{{value.Exception}}'."

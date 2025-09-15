@@ -1,0 +1,22 @@
+input:
+   name         :  Files Not Processed in the past 12 hours retrieved from the database 
+   #cron         : "*/28 * * * * *"
+   #cron          : "* * * * * *"
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 3460000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Files Not Processed in the past 12 hours  : >
+                SELECT a."SHORT_NAME", coalesce(completed_count,0) processed_count from "AF_T_OBJ_SPEC" a LEFT JOIN
+                (select "STREAM_UUID", count(1) as completed_count from "DP_C_INPUT" where 
+                "CREATED_DATE" < current_date  - interval '12 hours' and "STREAM_UUID" in
+                ('74b44a4b-008f-4dd8-a03e-cb51191fbcc7', '12135f5b-2791-4b1b-adfd-b1824e3cb30a') 
+                and "STATUS"=0  group by  "STREAM_UUID") b
+                ON a."OBJ_SPEC_UUID" = b."STREAM_UUID" 
+                WHERE a."OBJ_SPEC_UUID" in 
+                ('74b44a4b-008f-4dd8-a03e-cb51191fbcc7', '12135f5b-2791-4b1b-adfd-b1824e3cb30a')

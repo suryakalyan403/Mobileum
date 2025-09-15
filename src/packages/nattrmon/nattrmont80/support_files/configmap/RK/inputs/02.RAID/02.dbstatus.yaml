@@ -1,0 +1,12 @@
+input: 	
+  name         : RAFM RAID Status DB
+  cron         : "*/30 * * * *"
+  #Every 30th Minute
+  waitForFinish: true
+  onlyOnEvent  : true
+  execFrom     : nInput_RAIDStatus_DB
+  execArgs     :
+    chKeys        : aipServers
+    attrTemplate  : RAID/DB connections
+    useCache      : aipCache
+

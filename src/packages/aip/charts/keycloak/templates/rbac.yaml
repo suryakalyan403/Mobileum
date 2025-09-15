@@ -1,0 +1,38 @@
+{{- if (default .Values.rbac.enabled false) }} 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "aip.names.fullname" . }}-sa
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+automountServiceAccountToken: false
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "aip.names.fullname" . }}-cr
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "aip.names.fullname" . }}-crb
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "aip.names.fullname" . }}-cr
+subjects:
+- kind: ServiceAccount
+  name: {{ include "aip.names.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}
+{{- end }}

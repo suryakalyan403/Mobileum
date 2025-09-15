@@ -1,0 +1,12 @@
+{{- if .Values.pvcInternalManagement }}
+{{- $persistence := .Values.persistence | default dict }}
+{{- if $persistence.deployment }}
+{{- include "aip.volumes.claims" ( dict "persistence" .Values.persistence.deployment "context" $ ) }}
+{{- end }}
+{{- if $persistence.process }}
+{{- include "aip.volumes.claims" ( dict "persistence" .Values.persistence.process "context" $ ) }}
+{{- end }}
+{{- if $persistence.common }}
+{{- include "aip.volumes.claims" ( dict "persistence" .Values.persistence.common "context" $ ) }}
+{{- end }}
+{{- end }}

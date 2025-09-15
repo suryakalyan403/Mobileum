@@ -1,0 +1,73 @@
+deployment:
+  name: portal
+  waitOnFailure: true
+  replicas: 1
+  livenessProbe:
+    initialDelaySeconds: 340
+    periodSeconds: 120
+    timeoutSeconds: 60
+  readinessProbe:
+    initialDelaySeconds: 240
+    periodSeconds: 120
+    timeoutSeconds: 60
+  license:
+    secretName: "fm-raid-license"
+  productConfig:
+    secretName: "portalfm-product-config"
+
+image:
+  #UncommentDuring Installation
+  #repository: "portal-8.2.7"
+  #tag: "2.1.4"
+
+
+  repository: "aip/portal-8.2.10"
+ 
+  #UncommentDuring 8.2.10:4.5.3 Upgrade 
+  #tag: "4.5.0"
+
+  #UncommentDuring 8.2.10:4.5.3 Upgrade
+  tag: "4.5.3"
+
+customPodLabels:
+  cnfc_id: 7dbdaec1-d586-4036-8876-95785b19c94a
+  
+service:
+  type: "NodePort"
+  
+riskProduct:
+  namespace: raid-rafm-portal
+  ha: false
+
+  #UncommentDuring Installation
+  #aipChart: aip/charts/portal-2.1.4.tgz
+  
+  #Uncomment During 8.2.10:4.5.0 Upgrade
+  #aipChart: aip/charts/portal-4.5.0.tgz
+  
+  #Uncomment During 8.2.10:4.5.3  Upgrade
+  aipChart: aip/charts/portal-4.5.3.tgz
+
+  # Yaml file with settings defining the pod resources.
+  # Located under "riskPackagesDir" directory
+  server: common/aip_settings/resources/portal-resources.yaml
+
+  externalPort: 30080
+
+  adjustaipinstall: "false"
+  adjustPVCDeclaration: "false"
+
+dataPersistence:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  size: 10G
+  storageClass: robin
+
+riskDatabase:
+  namespace: portal-common
+  deploymentName: postgresql-portal
+  databaseName: raidportal
+   use "raid-<riskProduct.name>" to set db in same namespace as application
+  tablespaceName: portal_data
+  externalPort: 30523

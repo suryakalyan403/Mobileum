@@ -1,0 +1,6 @@
+input: 	
+   name         : nAttrMon internals
+   cron         : "*/10 * * * * *"
+   waitForFinish: true
+   onlyOnEvent  : true
+   execFrom     : nInput_nAttrMon

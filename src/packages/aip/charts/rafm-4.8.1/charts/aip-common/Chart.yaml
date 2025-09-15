@@ -1,0 +1,10 @@
+apiVersion: v2
+description: Library for AIP based charts
+keywords:
+- aip
+- common
+- library
+kubeVersion: '>=1.16.0-0'
+name: aip-common
+type: library
+version: 0.13.0

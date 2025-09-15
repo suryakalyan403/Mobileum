@@ -1,0 +1,19 @@
+input:
+   name         : Cases Under Analysis more than 2hours retrieved from the database 
+   #cron         : "*/29 * * * * *"
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 1500000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Cases Under Analysis  : >
+               SELECT coalesce(COUNT(1), 0) AS cases_under_analysis FROM (
+               SELECT 
+                  extract(epoch from (current_timestamp - A.modified_date))/60 analysis_time
+                  FROM acm_t_case a
+                  WHERE A.status = '2'
+                ) t  where analysis_time > 120

@@ -1,0 +1,24 @@
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  annotations:
+    app.aip/deployment-epoch: "1751267030"
+    app.aip/deployment-time: 2025-06-30T16:03:50+0900
+    app.aip/operation: Upgrade or Rollback
+    app.aip/owner: AIP_Active-Intelligence-Platform
+    app.aip/revision: "3"
+    meta.helm.sh/release-name: nattrmont80
+    meta.helm.sh/release-namespace: ns-mbl-raid-fm
+  creationTimestamp: "2025-06-04T09:55:36Z"
+  labels:
+    app.kubernetes.io/instance: nattrmont80
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nattrmon
+    app.kubernetes.io/part-of: AIP_Active-Intelligence-Platform
+    app.kubernetes.io/version: 0.8.10
+    helm.sh/chart: nattrmon-0.8.10
+  name: nattrmont80
+  namespace: ns-mbl-raid-fm
+  resourceVersion: "295745360"
+  uid: 4826048c-810e-475f-acb6-cd9e68f7fa36

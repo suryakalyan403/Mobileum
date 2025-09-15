@@ -1,0 +1,18 @@
+input:
+   name         : Collected File Count retrieved from the database 
+   #cron         : "*/14 * * * * *"
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 840000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Collected File Count  : >
+                SELECT a."SHORT_NAME", coalesce (collected_count, 0) as collected_count from "AF_T_OBJ_SPEC" a left join
+                (select "STREAM_UUID", count(1) as collected_count from "DP_C_INPUT" where 
+                "CREATED_DATE" > current_timestamp  - interval '15 minutes' and "STREAM_UUID" in
+                ('74b44a4b-008f-4dd8-a03e-cb51191fbcc7', '12135f5b-2791-4b1b-adfd-b1824e3cb30a') 
+                group by  "STREAM_UUID") b on a."OBJ_SPEC_UUID" = b."STREAM_UUID"  where a."OBJ_SPEC_UUID" in ('74b44a4b-008f-4dd8-a03e-cb51191fbcc7', '12135f5b-2791-4b1b-adfd-b1824e3cb30a')

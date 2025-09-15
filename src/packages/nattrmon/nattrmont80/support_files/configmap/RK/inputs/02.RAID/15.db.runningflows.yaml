@@ -1,0 +1,26 @@
+input:
+   name         : Long Running flows retrieved from the database 
+   #cron         : "9 */1 * * * *"
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 3600000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Long Running Flows        : >
+               SELECT COUNT(1) FROM (
+               SELECT "INSTANCE_ID" "Instance",
+                  C."SHORT_NAME" "Flow",
+                  A."FLOW_VERSION" "Version",
+                  A."FLOW_RUN_ID" "RunID",
+                  A."CREATED_BY" "User",
+                  TO_CHAR(A."CREATED_DATE", 'YYYY-MM-DD HH24:MI:SS') "Flow Start Date",
+                  EXTRACT( epoch from (CURRENT_DATE - A."CREATED_DATE"))/60 running_time
+                  FROM "CBPM_C_RUNNING_FLOWS" A, "AF_T_OBJ_SPEC" C
+                  WHERE A."FLOW_STATUS" = 2
+                  AND C."OBJ_SPEC_UUID" = A."FLOW_ID"
+                  AND  A."CREATED_DATE" > current_date - interval '1 day'
+                ) t  where running_time > 120

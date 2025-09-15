@@ -1,0 +1,278 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "additionalCatalogs": {
+            "type": "object"
+        },
+        "automountServiceAccountToken": {
+            "type": "boolean"
+        },
+        "caTrust": {
+            "type": "object",
+            "properties": {
+                "configmap": {
+                    "type": "null"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "secret": {
+                    "type": "null"
+                }
+            }
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "worker_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "properties": {
+                "allowPrivilegeEscalation": {
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "privileged": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "customPodLabels": {
+            "type": "object"
+        },
+        "deployment": {
+            "type": "object",
+            "properties": {
+                "CHANNEL_WNOTS": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "options": {
+                            "type": "object",
+                            "properties": {
+                                "gzip": {
+                                    "type": "boolean"
+                                },
+                                "index": {
+                                    "type": "string"
+                                },
+                                "multifile": {
+                                    "type": "boolean"
+                                },
+                                "secBucket": {
+                                    "type": "string"
+                                },
+                                "secFile": {
+                                    "type": "string"
+                                },
+                                "secKey": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "DEBUG": {
+                    "type": "boolean"
+                },
+                "JVM_MEMMSPERC": {
+                    "type": "string"
+                },
+                "JVM_MEMMXPERC": {
+                    "type": "string"
+                },
+                "LIBS": {
+                    "type": "string"
+                },
+                "NAM_KUBE_RAID": {
+                    "type": "null"
+                },
+                "OAF_JARGS": {
+                    "type": "string"
+                },
+                "PLUGSORDER": {
+                    "type": "string"
+                },
+                "isPortal": {
+                    "type": "boolean"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "raidComponentPodName": {
+                    "type": "string"
+                }
+            }
+        },
+        "hostAliases": {
+            "type": "array"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "pullSecrets": {
+                    "type": "array"
+                },
+                "registry": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "livenessProbe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": {
+                    "type": "integer"
+                },
+                "initialDelaySeconds": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "periodSeconds": {
+                    "type": "integer"
+                },
+                "successThreshold": {
+                    "type": "integer"
+                },
+                "timeoutSeconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "nattrmon": {
+            "type": "object",
+            "properties": {
+                "kubeMetrics": {
+                    "type": "boolean"
+                },
+                "podExec": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "nodeAffinity": {
+            "type": "object"
+        },
+        "podAffinity": {
+            "type": "object"
+        },
+        "podAntiAffinity": {
+            "type": "object"
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "readinessProbe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": {
+                    "type": "integer"
+                },
+                "initialDelaySeconds": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "periodSeconds": {
+                    "type": "integer"
+                },
+                "successThreshold": {
+                    "type": "integer"
+                },
+                "timeoutSeconds": {
+                    "type": "integer"
+                }
+            }
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "ipFamilies": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ipFamilyPolicy": {
+                    "type": "string"
+                },
+                "nodePort": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "testAnnotation": {
+            "type": "object",
+            "properties": {
+                "helm.sh/hook": {
+                    "type": "string"
+                },
+                "helm.sh/hook-delete-policy": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

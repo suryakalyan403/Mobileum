@@ -1,0 +1,32 @@
+input:
+# --------------------------------------
+  name         : RAID and Portal Java GC 
+  cron         : "* */3 * * *"
+  waitForFinish: true
+  onlyOnEvent  : false
+  execFrom     : nInput_JavaGC
+  execArgs     :
+    type        : kube
+    kube        :
+      namespace: "{{$env 'NAM_KUBE_NAMESPACE'}}"
+      selector :
+        where:
+        - cond: equals
+          args:
+          - status.phase
+          - Running
+        - cond: match
+          args:
+          - metadata.name
+          - "{{$env 'NAM_KUBE_RAID'}}"
+    attrTemplate: "RAID/Java {{_name}}"
+    #nameSummary   : GC Summary
+    #nameCollectors: GC Collectors
+    #nameThreads   : Threads
+    #nameSpaces    : GC Spaces
+    #nameMem       : Memory
+    #includeSummary   : true
+    #includeCollectors: true
+    #includeThreads   : true
+    #includeSpaces    : true
+    #includeMem       : true

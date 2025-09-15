@@ -1,0 +1,16 @@
+input:
+   name         : Semaphores in Red or Yellow retrieved from the database 
+   #cron         : "*/8 * * * * *"  
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 270000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Semaphores in Red or Yellow       : >
+                select semaphore_status, coalesce(count(1),0) semaphore_count from (
+                        select  (case when "VALUE" = '0' then 'Red' when "VALUE" = '1' then 'Yellow' else 'Green' end) as semaphore_status  from "CBPM_T_SEMAPHORE" 
+                ) t  where semaphore_status in ('Red', 'Yellow') group by semaphore_status

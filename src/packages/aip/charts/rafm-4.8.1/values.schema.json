@@ -1,0 +1,610 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "automountServiceAccountToken": {
+            "type": "boolean"
+        },
+        "cacerts": {
+            "type": "object",
+            "properties": {
+                "configmap": {
+                    "type": "string"
+                },
+                "keystoreAlias": {
+                    "type": "string"
+                },
+                "keystorePassword": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "caTrust": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "secret":{
+                    "type": ["null", "string"]
+                },
+                "configmap":{
+                    "type": ["null", "string"]
+                }
+            }
+        },
+        "cleanupNodeAffinity": {
+            "type": ["null","object"]
+        },
+        "cleanupPodAffinity": {
+            "type": ["null","object"]
+        },
+        "cleanupPodAntiAffinity": {
+            "type": ["null","object"]
+        },
+        "deployment": {
+            "type": "object",
+            "properties": {
+                "auditLogLevel": {
+                    "type": "string"
+                },
+                "base-dir": {
+                    "type": ["null","string"]
+                },
+                "mode": {
+                    "type": ["null","string"]
+                },
+                "datamodelLogLevel": {
+                    "type": "string"
+                },
+                "datastoreLogLevel": {
+                    "type": "string"
+                },
+                "hkLogLevel": {
+                    "type": "string"
+                },
+                "interactive-setup": {
+                    "type": "boolean"
+                },
+                "license": {
+                    "type": "object",
+                    "properties": {
+                        "secretName": {
+                            "type": ["null","string"]
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "failureThreshold": {
+                            "type": "integer"
+                        },
+                        "initialDelaySeconds": {
+                            "type": "integer"
+                        },
+                        "periodSeconds": {
+                            "type": "integer"
+                        },
+                        "successThreshold": {
+                            "type": "integer"
+                        },
+                        "timeoutSeconds": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "lmLogLevel": {
+                    "type": "string"
+                },
+                "logLevel": {
+                    "type": "string"
+                },
+                "patch-path": {
+                    "type": ["null","string"]
+                },
+                "productConfig": {
+                    "type": "object",
+                    "properties": {
+                        "secretName": {
+                            "type": ["null","string"]
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "failureThreshold": {
+                            "type": "integer"
+                        },
+                        "initialDelaySeconds": {
+                            "type": "integer"
+                        },
+                        "periodSeconds": {
+                            "type": "integer"
+                        },
+                        "successThreshold": {
+                            "type": "integer"
+                        },
+                        "timeoutSeconds": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "replicas": {
+                    "type": "integer"
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "rootLogLevel": {
+                    "type": "string"
+                },
+                "smartTransformLogLevel": {
+                    "type": "string"
+                },
+                "waitOnFailure": {
+                    "type": "boolean"
+                },
+                "waitOnFailureTimeout": {
+                    "type": "string"
+                },
+                "wpkgLogLevel": {
+                    "type": "string"
+                },
+                "wsLogLevel": {
+                    "type": "string"
+                },
+                "xdtPort": {
+                    "type": "integer"
+                },
+                "ha": {
+                    "type": "boolean"
+                },
+                "runLevel": {
+                    "type": ["null","string"]
+                },
+                "domain": {
+                    "type": ["null","string"]
+                }
+            }
+        },
+        "hostAliases": {
+            "type": ["null","array"]
+        },
+        "podDisruptionBudget": {
+            "type": "boolean"
+        },
+        "logPersistence": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "existingClaim": {
+                    "type": ["null","string"]
+                },
+                "accessModes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "size": {
+                    "type": "string"
+                },
+                "storageClass": {
+                    "type": ["null","string"]
+                },
+                "volumeName": {
+                    "type": ["null","string"]
+                }
+            }
+        },
+        "dataPersistence": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "existingClaim": {
+                    "type": ["null","string"]
+                },
+                "accessModes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "size": {
+                    "type": "string"
+                },
+                "storageClass": {
+                    "type": ["null","string"]
+                },
+                "volumeName": {
+                    "type": ["null","string"]
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "registry": {
+                    "type": ["null","string"]
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "pullSecrets": {
+                    "type": "array"
+                }
+            }
+        },
+        "nodeAffinity": {
+            "type": ["null","object"]
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "common": {
+                    "type": ["null","array"]
+                },
+                "process": {
+                    "type": ["null","array"]
+                },
+                "deployment": {
+                    "type": ["null","array"]
+                }
+            }
+        },
+        "permissions": {
+            "type": "object",
+            "properties": {
+                "common": {
+                    "type": ["null","array"]
+                },
+                "process": {
+                    "type": ["null","array"]
+                },
+                "deployment": {
+                    "type": ["null","array"]
+                }
+            }
+        },
+        "podAffinity": {
+            "type": ["null","object"]
+        },
+        "podAntiAffinity": {
+            "type": ["null","object"]
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "xdtPort": {
+                    "type": "integer"
+                }
+            }
+        },
+        "process": {
+            "type": "object",
+            "properties": {
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "processImage": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": ["null","string"]
+                },
+                "registry": {
+                    "type": ["null","string"]
+                },
+                "repository": {
+                    "type": ["null","string"]
+                },
+                "tag": {
+                    "type": ["null","string"]
+                }
+            }
+        },
+        "processNodeAffinity": {
+            "type": ["null","object"]
+        },
+        "processPodAffinity": {
+            "type": ["null","object"]
+        },
+        "processPodAntiAffinity": {
+            "type": ["null","object"]
+        },
+        "skipSetup": {
+            "type": "boolean"
+        },
+        "storage": {
+            "type": "object",
+            "properties": {
+                "gs": {
+                    "type": "object",
+                    "properties": {
+                        "service-account": {
+                            "type": "object",
+                            "properties": {
+                                "secretName": {
+                                    "type": ["null","string"]
+                                },
+                                "configmapName": {
+                                    "type": ["null","string"]
+                                }
+                            }
+                        }
+                    }},
+                "hdfs": {
+                    "type": "object",
+                    "properties": {
+                        "authentication": {
+                            "type": "object",
+                            "properties": {
+                                "kerberos": {
+                                    "type": "object",
+                                    "properties": {
+                                        "conf": {
+                                            "type": "object",
+                                            "properties": {
+                                                "configmapName": {
+                                                    "type": ["null","string"]
+                                                },
+                                                "secretName": {
+                                                    "type": ["null","string"]
+                                                }
+                                            }
+                                        },
+                                        "keytab": {
+                                            "type": "object",
+                                            "properties": {
+                                                "configmapName": {
+                                                    "type": ["null","string"]
+                                                },
+                                                "secretName": {
+                                                    "type": ["null","string"]
+                                                }
+                                            }
+                                        },
+                                        "principal": {
+                                            "type": ["null","string"]
+                                        }
+                                    }
+                                },
+                                "type": {
+                                    "type": ["null","string"]
+                                }
+                            }
+                        },
+                        "configmapName": {
+                            "type": ["null","string"]
+                        },
+                        "secretName": {
+                            "type": ["null","string"]
+                        },
+                        "user": {
+                            "type": ["null","string"]
+                        }
+                    }
+                },
+                "s3": {
+                    "type": "object",
+                    "properties": {
+                        "secretName": {
+                            "type": ["null","string"]
+                        },
+                        "access-key-id": {
+                            "type": ["null","string"]
+                        },
+                        "credentials-type": {
+                            "type": "string"
+                        },
+                        "endpoint": {
+                            "type": "string"
+                        },
+                        "region": {
+                            "type": "string"
+                        },
+                        "secret-access-key": {
+                            "type": ["null","string"]
+                        },
+                        "session-token": {
+                            "type": ["null","string"]
+                        },
+                        "credentials-file": {
+                            "type": "object",
+                            "properties": {
+                                "secretName": {
+                                    "type": ["null","string"]
+                                },
+                                "configmapName": {
+                                    "type": ["null","string"]
+                                }
+                            }
+                        },
+                        "signatureVersion": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "azure": {
+                    "type": "object",
+                    "properties": {
+                        "container": {
+                            "type": ["null","string"]
+                        },
+                        "connectionString": {
+                            "type": ["null","string"]
+                        },
+                        "accountName": {
+                            "type": ["null","string"]
+                        },
+                        "accountKey": {
+                            "type": ["null","string"]
+                        }
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "upgradeImage": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": ["null","string"]
+                },
+                "registry": {
+                    "type": ["null","string"]
+                },
+                "repository": {
+                    "type": ["null","string"]
+                },
+                "tag": {
+                    "type": ["null","string"]
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "enabled": {
+                "type": "boolean"
+            }
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "enabled": {
+                "type": "boolean"
+            }
+        },
+        "customPodLabels": {
+            "type": "object"
+        },
+        "customJobLabels": {
+            "type": "object"
+        },
+        "customPodAnnotations": {
+            "type": "object"
+        },
+        "customJobAnnotations": {
+            "type": "object"
+        },
+        "volumePermissions": {
+            "type": "object",
+            "securityContext": {
+                "type": "object",
+                "runAsUser": {
+                    "type": "integer"
+                }
+            },
+            "image": {
+                "type": "object",
+                "properties": {
+                    "pullPolicy": {
+                        "type": "string"
+                    },
+                    "registry": {
+                        "type": ["null","string"]
+                    },
+                    "repository": {
+                        "type": "string"
+                    },
+                    "tag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "resources": {
+                "type": "object",
+                "properties": {
+                    "limits": {
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "type": "string"
+                            },
+                            "memory": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "requests": {
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "type": "string"
+                            },
+                            "memory": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

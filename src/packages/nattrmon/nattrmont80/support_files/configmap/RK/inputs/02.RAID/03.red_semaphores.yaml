@@ -1,0 +1,16 @@
+input:
+   name         : Red Semaphores retrieved from the database 
+   #cron         : "*/8 * * * * *"  
+   waitForFinish: true
+   onlyOnEvent  : false
+   timeout      : 60000
+   timeInterval : 240000
+   execFrom     : nInput_DB
+   execArgs     : 
+      key : dbRAFMAdm
+      sqlsByType:
+         postgresql:
+            Database/Red Semaphores        : >
+                select coalesce(count(1),0) from (
+                        select * from "CBPM_T_SEMAPHORE" 
+                ) t  where "VALUE" = '0'

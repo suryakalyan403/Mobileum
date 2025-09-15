@@ -1,0 +1,10 @@
+storage:
+  s3:
+   endpoint: "https:http://127.0.0.1:30167"
+   region: ""
+   credentials-type: static
+   access-key-id: "adm"
+   secret-access-key: "Password1"
+
+riskProduct:
+  awsProfile: "passive"

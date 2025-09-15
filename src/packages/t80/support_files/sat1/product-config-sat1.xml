@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ic:instance-config xmlns:ic="urn:wedo:infra:instance-config-2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <global>
+    <string name="DbHost">raiddb-pgsql-ha.ns-mbl-raid-pg</string>
+    <int name="DbPort">5432</int>
+    <string name="DbDatabase">rakuten</string>
+    <string name="DbDriver">org.postgresql.Driver</string>
+    <string name="DbRdbms">Postgresql</string>
+    <string name="DbJdbcUrl">jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten</string>
+
+    <string name="PortalDbDriver">org.postgresql.Driver</string>
+    <string name="PortalDbJdbcUrl">jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten</string>
+
+    <!-- <string name="PathToInstance">/opt/server/instances/t80sat1</string> -->
+	<composite output-type="String" name="PathToInstance">/opt/server/instances/${env.DEPLOYMENT_NAME}</composite>
+
+    <string name="DbUsersDbaUser">appadm</string>
+    <string name="DbUsersDbaPwd">appadm</string>
+	<string name="PortalDbUsersAdmUser">portalfms_adm_f6_fm</string>
+    <string name="PortalDbUsersAdmPwd">portalfms_adm_f6_fm</string>
+    <string name="PortalDbUsersAppUser">portalfms_app_f6_fm</string>
+    <string name="PortalDbUsersAppPwd">portalfms_app_f6_fm</string>
+    <string name="DbUsersAdmUser">raidt80adm11_fm</string>
+    <string name="DbUsersAdmPwd">raidt80adm11_fm</string>
+    <string name="DbUsersAppUser">raidt80app11_fm</string>
+    <string name="DbUsersAppPwd">raidt80app11_fm</string>
+    <string name="DbUsersDatUser">raidt80dat11_fm</string>
+    <string name="DbUsersDatPwd">raidt80dat11_fm</string>
+
+    <boolean name="DbCreateDATUser">true</boolean>
+    <boolean name="DbCreateUsers">true</boolean>
+
+    <boolean name="Satellite">true</boolean> <!-- DO NOT CHANGE -->
+    <!-- Enables registration in the portal, used when installing a satellite. -->
+    <boolean name="PerformServerRegistration">false</boolean>
+	
+    <boolean name="CreateSystemPropertiesFromConfigFile">false</boolean> <!-- DO NOT CHANGE -->
+    <boolean name="OotbDataPumpOperationalDashboards">true</boolean> <!-- VALIDATE IF NECESSARY -->
+	
+    <string name="DbTablespacesSmallData">raiddata</string>
+    <string name="DbTablespacesMediumData">raiddata</string>
+    <string name="DbTablespacesLargeData">raiddata</string>
+    <string name="DbTablespacesLOB">raiddata</string>
+    <string name="DbTablespacesSmallIndex">raiddata</string>
+    <string name="DbTablespacesMediumIndex">raiddata</string>
+    <string name="DbTablespacesLargeIndex">raiddata</string>
+    <string name="DbTablespacesDefault">raiddata</string>
+    <string name="DbTablespacesTemp">raiddata</string>
+
+	<string name="username">adm</string>
+    <string name="password">Password1</string>
+
+    <!--<string name="ServerHost">localhost</string> --><!--3.7.1 SETUP -->
+	
+	<!-- <string name="ServerHost">t80sat1.t80-risk.svc.cluster.local</string> -->
+	<!-- 3.8.0 STARTUP and SETUP AND 3.7.1 STARTUP, please use <serviceName>.<serviceNamespace>.svc.cluster.local -->
+
+	<composite output-type="String" name="ServerHost">${env.DEPLOYMENT_NAME}.ns-mbl-raid-fm.svc.cluster.local</composite>
+
+    <int name="ServerPort">40353</int> <!-- DO NOT CHANGE -->
+    <string name="ServerAdminUser">adm</string>
+    <string name="ServerAdminPwd">Password1</string>
+    <string name="ServerAdminPassword">Password1</string>
+    <string name="InternalServerCommunicationUser">internal</string>
+    <string name="InternalServerCommunicationPwd">Password1</string>
+
+    <!--string name="ServerMemoryOptions">-Xms128M -Xmx2048M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:-DisableExplicitGC -XX:MaxMetaspaceSize=256m -Dwedo.reporting=true -Xloggc:log/gc_`date +"%Y%m%d_%H%M%S"`.log -Dfile.encoding=UTF-8</string-->
+
+    <string name="ServerMemoryOptions">-Xms128M -Xmx24G -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:-DisableExplicitGC -XX:MaxPermSize=256m -Dwedo.reporting=true -Xloggc:log/gc_`date +"%Y%m%d_%H%M%S"`.log -Dfile.encoding=UTF-8 -Duser.timezone="Asia/Tokyo" -Djava.net.preferIPv6Addresses=true </string>
+
+	<string name="InstanceType">RAFM</string>
+    <!-- <string name="InstanceName">t80sat1</string> -->
+	<composite output-type="String" name="InstanceName">${env.DEPLOYMENT_NAME}</composite>
+	
+	<string name="CompanyWebIdentifier">mobileum.com</string>
+    <composite output-type="String" name="PortletCategory">${env.DEPLOYMENT_NAME}</composite>
+
+    <!--string name="MailServer"></string-->
+    <!--int name="MailServerPort"></int-->
+    <!--string name="MailServerUser"></string-->
+    <!--string name="MailServerPassword"></string-->
+    <string name="WebServerHost">localhost</string> <!-- DO NOT CHANGE -->
+    <int name="WebServerPort">8080</int> <!-- DO NOT CHANGE -->
+
+    <boolean name="CreateSystemPropertiesFromConfigFile">false</boolean> <!-- VALIDATE IF NECESSARY -->
+    <boolean name="OotbDataPumpOperationalDashboards">true</boolean> <!-- VALIDATE IF NECESSARY -->
+
+    <boolean name="fabase">true</boolean> <!-- T80 PARAMETER -->
+    <boolean name="faroam">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fabypass">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fairsf">true</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fasubs">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fahusage">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="faprepaid">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fadealers">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fapbx">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fainternal">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="fawholesale">false</boolean> <!-- T80 PARAMETER -->
+    <boolean name="farobocalling">true</boolean> <!-- T80 PARAMETER -->
+    <boolean name="famessage">false</boolean> <!-- T80 PARAMETER -->
+
+	<string name="EventHubInternalBrokerDirectory">/local/t80/activemq</string>
+	<string name="PathToKeyvaluestoreFilesystem">/local/t80/keyvaluestore</string> <!-- T80 PARAMETER -->
+	<string name="PathToSourceFilesystem">/productShared/t80</string> <!-- T80 PARAMETER -->
+	<string name="PathToDataFilesystem">/productShared/t80/data</string> <!-- T80 PARAMETER -->
+	<string name="PathToDatastoreFilesystem">/productShared/t80/datastore</string> <!-- T80 PARAMETER -->
+	<string name="PathToDataFMSFilesystem">/productShared/t80/datafms</string> <!-- T80 PARAMETER -->
+	<string name="PathToVfwDataFilesystem">/productShared/t80/data</string> <!-- T80 PARAMETER -->
+	<string name="PathToVfwExportFilesystem">/productShared/t80/data</string> <!-- T80 PARAMETER -->
+	<string name="PathToSmsfwDataFilesystem">/productShared/t80/data</string> <!-- T80 PARAMETER -->
+	<string name="PathToMLDataFilesystem">/productShared/t80/data/ml</string> <!-- T80 PARAMETER -->
+
+	<string name="ModulePartitioning">true</string>
+    <boolean name="EnablePartitioning">true</boolean>
+    <boolean name="EnableMultiTenant">false</boolean>
+
+	<boolean name="MetaPlanCacheEnable">false</boolean>
+    <int name="MinimumQueryPlanCacheThreshold">20000</int>
+
+    <!-- ML Settings -->
+	<string name="MLSparkServerHost">http://sparkjobmanager.sparkjobmanager.svc.cluster.local:8080</string>
+	<string name="MLSparkProperties"></string>
+	<string name="MLFilesystemType">Local</string>
+	<string name="MLS3FSBucketName">t80ml</string>
+	<string name="MLS3FSBaseDirectory">/</string>
+
+    <!-- T80 S3 Connector settings -->
+	<string name="S3Endpoint">https://datalake-staging.rmnkiba.local</string>
+	<string name="S3DefaultBucket">s3://fms-working-new/fms-stagging-env03</string>
+	<string name="S3AccessKey">0RWMVOG95K7DJ5RK4IGP</string>
+	<string name="S3SecretKey">Ly0kHNx3ZUnbTUE5QmJf9lh3FxiV+DyKc0vPSkhS</string>
+	<string name="S3Properties"></string>
+
+	<string name="VFWUsername">[vfwuser]</string> <!-- T80 PARAMETER -->
+    <string name="VFWPassword">[vfwpassword]</string> <!-- T80 PARAMETER -->
+    <string name="SMSFWUsername">[smsfwuser]</string> <!-- T80 PARAMETER -->
+    <string name="SMSFWPassword">[smsfwpassword]</string> <!-- T80 PARAMETER -->
+    <string name="TCGUsername">[tcguser]</string> <!-- T80 PARAMETER -->
+    <string name="TCGPassword">[tcgpassword]</string> <!-- T80 PARAMETER -->
+    <string name="HsqlMode">OFF</string> <!-- T80 PARAMETER -->
+
+    <!-- Enables registration in the portal, used when installing a satellite. -->
+  </global>
+</ic:instance-config>

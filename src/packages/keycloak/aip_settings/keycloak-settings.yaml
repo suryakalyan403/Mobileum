@@ -1,0 +1,73 @@
+deployment:
+  name: "keycloak"
+
+image:
+  pullPolicy: "IfNotPresent"
+  registry: "klstg-docker.slb-wartifactory-v.stg.rmn.local"
+  repository: "mobileum/network-fraud-intelligence/keycloak"
+  tag: "0.5.7"
+
+service:
+  type: "NodePort"
+  labels:
+    cis.f5.com/as3-app: keycloak_app_stage_passive
+    cis.f5.com/as3-pool: keycloak_pool_stage_passive
+    cis.f5.com/as3-tenant: kls14_keyloak_tenant_passive
+
+rbac:
+  enabled: true
+
+probe:
+  failureThreshold: 5
+  periodSeconds: 60
+  successThreshold: 1
+  timeoutSeconds: 60
+  initialDelaySeconds: 300
+
+buildEnvs:
+  TZ: "Asia/Tokyo"
+  JAVA_OPTS: "-XX:InitialRAMPercentage=25.0 -XX:MaxRAMPercentage=90.0 -Djava.net.preferIPv4Stack=false -Djava.net.preferIPv6Addresses=true"
+
+customPodLabels:
+  cnfc_id: a5241d2a-de39-4538-99c6-ad835a8fa884
+  cnf_id: 79b63e72-4153-420c-a320-d65072a5c018
+  ns_id: 144359a9-4da8-4867-8600-febf2407ab42
+
+
+db:
+  #database_vendor: postgres # this is default value and do not change
+  database_url: "jdbc:postgresql://raiddb-pgsql-ha.ns-mbl-raid-pg:5432/rakuten"
+  db_name: "postgres"
+  db_username: "appadm" 
+  db_password: "appadm"
+
+  #db_host: "raiddb-pgsql-ha.ns-mbl-raid-pg" # if database_url is not set
+  #db_port: "5432" # if database_url is not set
+  #db_name: "postgres" # if database_url is not set
+  #db_username: appadm # change this to available db username
+  #db_password: appadm # change this to available db password
+  #dbMigration: false
+
+config:
+  keycloak_user: "admin" 
+  keycloak_password: "Password1"
+
+
+tolerations:
+- key: "node"
+  operator: "Equal"
+  value: "TST"
+  effect: "NoSchedule"
+
+nodeAffinity:
+  type: "hard"
+  terms:
+    - expressions:
+        - key: node
+          operator: In
+          values:
+            - FMS
+
+riskProduct:
+  namespace: "ns-mbl-raif-fm"
+  aipChart: "aip/charts/keycloak-0.5.7-RK.tgz"

@@ -1,0 +1,10 @@
+storage:
+  gs:
+    service-account:
+      secretName: "gcp"
+    project-id: mobileum-demo
+    service-account-encoded-key: "insert-key-here"
+
+riskProduct:
+  gcpAccountFile: "common/support_files/service-account.json"
+  gcpSecretName: "gcp"

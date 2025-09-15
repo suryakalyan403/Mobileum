@@ -1,0 +1,32 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    app.aip/deployment-epoch: "1751267030"
+    app.aip/deployment-time: 2025-06-30T16:03:50+0900
+    app.aip/operation: Upgrade or Rollback
+    app.aip/owner: AIP_Active-Intelligence-Platform
+    app.aip/revision: "3"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{"app.aip/deployment-epoch":"1748517521","app.aip/deployment-time":"2025-05-29T20:18:41+0900","app.aip/operation":"Install","app.aip/owner":"AIP_Active-Intelligence-Platform","app.aip/revision":"1","meta.helm.sh/release-name":"nattrmont80","meta.helm.sh/release-namespace":"ns-mbl-raid-fm"},"creationTimestamp":"2025-05-29T11:18:42Z","labels":{"app.kubernetes.io/instance":"nattrmont80","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"nattrmon","app.kubernetes.io/part-of":"AIP_Active-Intelligence-Platform","app.kubernetes.io/version":"0.8.10","helm.sh/chart":"nattrmon-0.8.10"},"name":"nattrmont80","namespace":"ns-mbl-raid-fm","resourceVersion":"192655433","uid":"cd5a3230-6501-48a9-9f36-8bb4e83ff8ca"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"Role","name":"nattrmont80"},"subjects":[{"kind":"ServiceAccount","name":"nattrmont80"}]}
+    meta.helm.sh/release-name: nattrmont80
+    meta.helm.sh/release-namespace: ns-mbl-raid-fm
+  creationTimestamp: "2025-06-04T07:56:59Z"
+  labels:
+    app.kubernetes.io/instance: nattrmont80
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nattrmon
+    app.kubernetes.io/part-of: AIP_Active-Intelligence-Platform
+    app.kubernetes.io/version: 0.8.10
+    helm.sh/chart: nattrmon-0.8.10
+  name: nattrmont80
+  namespace: ns-mbl-raid-fm
+  resourceVersion: "295745362"
+  uid: 2a26a180-2b80-43cd-8ab9-38451dca3338
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nattrmont80
+subjects:
+- kind: ServiceAccount
+  name: nattrmont80

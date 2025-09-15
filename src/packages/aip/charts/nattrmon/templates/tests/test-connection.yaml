@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{include "aip.names.fullname" . }}-test
+  labels: {{- include "aip.labels.standard" . | nindent 4 }}
+    {{- if .Values.customPodLabels }}
+    {{- include "aip.renderer" ( dict "value" .Values.customPodLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations: {{- include "aip.annotations.standard" . | nindent 4 }}
+    {{- if .Values.testAnnotation }}
+    {{- include "aip.renderer" ( dict "value" .Values.testAnnotation "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  restartPolicy: Never
+  containers:
+    - name: {{ include "aip.names.fullname" . }}-test
+      image: {{ include "aip.images.image" ( dict "image" .Values.image )}}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      terminationMessagePolicy: FallbackToLogsOnError
+      command: ["/bin/bash","-c"]
+      args: 
+        - curl {{ include "aip.names.fullname" . }}:{{ .Values.deployment.port }}{{ .Values.readinessProbe.path }}
+      resources: {{ include "aip.resources.requests" ( dict "resources" .Values.resources "context" $ ) | nindent 8 }}

@@ -1,0 +1,14 @@
+name: "Standard ProducPatch Installation"
+version: 0.1.0
+
+
+
+goals:
+    -  name: "Install"
+       default: true
+       steps:
+         - description: "Run Product Patch"
+           type: "COMMAND"
+           options:
+             command: "/opt/wpkg/bin/wpkg -v -b ${bundle_base_dir}/*.tar.gz -c ${config_file} -p PathToInstance ${PathToInstance}"
+           
