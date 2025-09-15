@@ -6,11 +6,11 @@ pipeline {
         booleanParam(defaultValue: false, description: 'Dry run mode', name: 'DRY_RUN')
         booleanParam(defaultValue: false, description: 'Skip Tests', name: 'SKIP_TESTS')
     }
-    
+
     environment {
         DEPLOYMENT_DIR = "${WORKSPACE}/src/bin"
         MICROSERVICES = "portal t80 t50 t52 t54 t55 t56"
-        TERM = "xterm" 
+        TERM = "xterm"
     }
 
     stages {
@@ -43,22 +43,22 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Deploy Services') {
             steps {
                 script {
                     def servicesToDeploy = params.MICROSERVICE == 'all' ? env.MICROSERVICES.split() : [params.MICROSERVICE]
                     def dryRunFlag = params.DRY_RUN ? "dry-run" : ""
-                    
+
                     servicesToDeploy.each { service ->
                         stage("Deploy ${service}") {
                             try {
                                 sh """
                                     cd ${env.DEPLOYMENT_DIR}
-                                    export TERM=xterm  
+                                    export TERM=xterm
                                     echo "y" | bash risk-man.sh install ${service} ${dryRunFlag}
                                 """
-                                
+
                                 if (!params.DRY_RUN) {
                                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                                         timeout(time: 10, unit: 'MINUTES') {
@@ -77,7 +77,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Update Documentation') {
             when {
                 expression { return !params.DRY_RUN }
@@ -93,21 +93,17 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
-            slackSend channel: '#deployments', 
-                     message: "🚀 Successful deployment: ${params.MICROSERVICE} - ${env.BUILD_URL}"
+            echo "Successful deployment: ${params.MICROSERVICE} - ${env.BUILD_URL}"
         }
         failure {
-            slackSend channel: '#deployments', 
-                     message: "💥 Failed deployment: ${params.MICROSERVICE} - ${env.BUILD_URL}"
-            // Send logs for debugging
+            echo "Failed Deployment: ${params.MICROSERVICE} - ${env.BUILD_URL}"
             archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
         }
         always {
-            // Cleanup and generate report
-            junit '**/test-results/*.xml'
+            // Conditional JUnit processing as shown above
             cleanWs()
         }
     }
