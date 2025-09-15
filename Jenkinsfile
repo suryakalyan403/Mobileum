@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Test K8s Secret') {
             steps {
-                withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh 'echo $KUBECONFIG'
                 }
             }
