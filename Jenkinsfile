@@ -55,7 +55,7 @@ pipeline {
                             try {
                                 sh """
                                     cd ${env.DEPLOYMENT_DIR}
-                                    TERM=xterm ./risk-man.sh install ${service} ${dryRunFlag}
+                                    TERM=xterm  bash risk-man.sh install ${service} ${dryRunFlag}
                                 """
                                 
                                 if (!params.DRY_RUN) {
