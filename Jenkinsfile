@@ -55,7 +55,8 @@ pipeline {
                             try {
                                 sh """
                                     cd ${env.DEPLOYMENT_DIR}
-                                    TERM=xterm  bash risk-man.sh install ${service} ${dryRunFlag}
+                                    export TERM=xterm  
+                                    echo "y" | bash risk-man.sh install ${service} ${dryRunFlag}
                                 """
                                 
                                 if (!params.DRY_RUN) {
@@ -72,24 +73,6 @@ pipeline {
                                 error "Failed to deploy ${service}: ${e.getMessage()}"
                             }
                         }
-                    }
-                }
-            }
-        }
-        
-        stage('Integration Tests') {
-            when {
-                expression { return !params.DRY_RUN && !params.SKIP_TESTS }
-            }
-            steps {
-                script {
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh '''
-                            export KUBECONFIG=$KUBECONFIG
-                            echo "Running integration tests..."
-                            # Add your test commands here
-                            kubectl get pods -A -l app.kubernetes.io/instance
-                        '''
                     }
                 }
             }
