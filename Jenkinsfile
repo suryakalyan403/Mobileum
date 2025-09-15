@@ -5,6 +5,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh 'echo $KUBECONFIG'
+                    sh 'kubectl get pods -A'
                 }
             }
         }
