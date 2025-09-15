@@ -1,16 +1,10 @@
 pipeline {
     agent any
-
-    environment {
-        KUBECONFIG = ''   // will be injected by withCredentials
-    }
-
     stages {
-        stage('Check Cluster Info') {
+        stage('K8s Access') {
             steps {
-                withCredentials([file(credentialsId: 'k8s-config', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG')]) {
                     sh '''
-                        echo "Using kubeconfig: $KUBECONFIG"
                         kubectl cluster-info
                         kubectl get nodes
                     '''
