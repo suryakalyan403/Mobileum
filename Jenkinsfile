@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    KUBECONFIG = credentials('k8s-jenkins-secret-kubeconfig')
+    KUBECONFIG = credentials('k8s-jen-configview')
   }
   stages {
     stage('Check Cluster Access') {
