@@ -10,6 +10,7 @@ pipeline {
     environment {
         DEPLOYMENT_DIR = "${WORKSPACE}/src/bin"
         MICROSERVICES = "portal t80 t50 t52 t54 t55 t56"
+        TERM = "xterm" 
     }
 
     stages {
@@ -46,7 +47,7 @@ pipeline {
         stage('Deploy Services') {
             steps {
                 script {
-                    def servicesToDeploy = params.MICROSERVICE == 'all' ? env.MICROSERVICES : [params.MICROSERVICE]
+                    def servicesToDeploy = params.MICROSERVICE == 'all' ? env.MICROSERVICES.split() : [params.MICROSERVICE]
                     def dryRunFlag = params.DRY_RUN ? "dry-run" : ""
                     
                     servicesToDeploy.each { service ->
@@ -54,7 +55,7 @@ pipeline {
                             try {
                                 sh """
                                     cd ${env.DEPLOYMENT_DIR}
-                                    ./risk-man.sh install ${service} ${dryRunFlag}
+                                    TERM=xterm./risk-man.sh install ${service} ${dryRunFlag}
                                 """
                                 
                                 if (!params.DRY_RUN) {
