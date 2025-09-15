@@ -1,94 +1,16 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Docker Registry Login') {
-            steps {
-                script {
-                    echo "***** Authenticating to r.raid.cloud **********"
-
-                    def mds_id     = "$MDS_ID"
-                    def mds_secret = "$MDS_SECRET"
-                    def mob_reg_url = "$MOB_REG_URL"
-
-                    mobDocRegLogin(mds_id, mds_secret, mob_reg_url)
-                }
-            }
-        }
-
-        stage('Pull Image from Remote Registry') {
-            steps {
-                script {
-                    echo "********* Pulling the Image *********"
-
-                    def docker_reg = "$DOC_REG"
-                    def docker_img = "$DOC_IMG"
-                    def img_tag    = "$IMG_TAG"
-
-                    mobDockerPull(docker_reg, docker_img, img_tag)
-                }
-            }
-        }
-
-        stage('Tag Image') {
-            steps {
-                script {
-                    echo "********* Tagging the Image *********"
-
-                    def docker_reg = "$DOC_REG"
-                    def docker_img = "$DOC_IMG"
-                    def img_tag    = "$IMG_TAG"
-                    def client_reg = "$LOC_DOC_REG"
-
-                    mobDockerTag(docker_reg, docker_img, img_tag, client_reg)
-                }
-            }
-        }
-
-        stage('Push Image to Local Registry') {
-            steps {
-                script {
-                    echo "********* Pushing Image to the Registry *********"
-
-                    def docker_img = "$DOC_IMG"
-                    def img_tag    = "$IMG_TAG"
-                    def client_reg = "$LOC_DOC_REG"
-
-                    clientDocRegPush(docker_img, img_tag, client_reg)
-                }
-            }
-        }
+  agent any
+  environment {
+    KUBECONFIG = credentials('k8s-jenkins-secret-kubeconfig')
+  }
+  stages {
+    stage('Check Cluster Access') {
+      steps {
+        sh 'kubectl cluster-info'
+        sh 'kubectl get nodes'
+        sh 'kubectl get pods -A'
+      }
     }
-}
-
-def mobDocRegLogin(mds_id, mds_secret, mob_reg_url) {
-    sh """
-        export XDG_RUNTIME_DIR=/tmp/containers
-        mkdir -p \$XDG_RUNTIME_DIR
-
-        LOGIN_CMD=\$(curl -sLX POST "${mob_reg_url}/auth?f=docker" \
-                     -d "id=${mds_id}&secret=${mds_secret}")
-
-        eval "\$LOGIN_CMD"
-    """
-}
-
-def mobDockerPull(docker_reg, docker_img, img_tag) {
-    sh """
-        docker pull ${docker_reg}/${docker_img}:${img_tag}
-    """
-}
-
-def mobDockerTag(docker_reg, docker_img, img_tag, client_reg) {
-    sh """
-        docker tag ${docker_reg}/${docker_img}:${img_tag} \
-                   ${client_reg}/${docker_img}:${img_tag}
-    """
-}
-
-def clientDocRegPush(docker_img, img_tag, client_reg) {
-    sh """
-        docker push ${client_reg}/${docker_img}:${img_tag}
-    """
+  }
 }
 
