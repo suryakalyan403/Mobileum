@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        DEPLOYMENT_DIR = "${WORKSPACE}/src/bin"
+        DEPLOYMENT_DIR = "${WORKSPACE}/../src/bin"
         MICROSERVICES = "portal t80 t50 t52 t54 t55 t56"
         TERM = "xterm"
     }
