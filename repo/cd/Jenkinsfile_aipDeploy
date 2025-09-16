@@ -27,6 +27,18 @@ pipeline {
                 }
             }
         }
+          
+       stage('Checkout Code') {
+            steps {
+                checkout([$class: 'GitSCM',
+                  branches: [[name: '*/main']],
+                  userRemoteConfigs: [[
+                    url: 'https://github.com/suryakalyan403/Mobileum.git',
+                    credentialsId: 'git-creds'
+                  ]],
+                  extensions: [[$class: 'CloneOption', depth: 1, noTags: true, shallow: true]]
+                ])
+            }
 
         stage('Pre-deployment Checks') {
             steps {
