@@ -1,5 +1,5 @@
 deployment:
-  base-dir: "s3://fms-working/fms-stagging-passive"
+  base-dir: "s3://mobileum/raidops/deployments/stage"
 
 image:
   registry: "localhost:5000"
@@ -51,11 +51,6 @@ timezone: "UTC"
 
 service:
   ipFamilies: [ "IPv4" ] 
-
-customPodLabels:
-  cnf_id: 79b63e72-4153-420c-a320-d65072a5c018
-  ns_id:  144359a9-4da8-4867-8600-febf2407ab42
-
 
 riskProduct:
 
