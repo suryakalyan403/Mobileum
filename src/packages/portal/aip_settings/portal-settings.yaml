@@ -1,5 +1,5 @@
 deployment:
-  name: portal
+  name: portalfm
   waitOnFailure: true
   replicas: 1
   livenessProbe:
@@ -19,19 +19,11 @@ image:
   #UncommentDuring Installation
   #repository: "portal-8.2.7"
   #tag: "2.1.4"
-
-
   repository: "aip/portal-8.2.10"
- 
-  #UncommentDuring 8.2.10:4.5.3 Upgrade 
-  #tag: "4.5.0"
-
-  #UncommentDuring 8.2.10:4.5.3 Upgrade
-  tag: "4.5.3"
-
-customPodLabels:
-  cnfc_id: 7dbdaec1-d586-4036-8876-95785b19c94a
+  tag: "4.5.0"
   
+  #UncommentDuring 8.2.10:4.5.3 Upgrade
+  #tag: "4.5.3"
 service:
   type: "NodePort"
   
@@ -43,10 +35,10 @@ riskProduct:
   #aipChart: aip/charts/portal-2.1.4.tgz
   
   #Uncomment During 8.2.10:4.5.0 Upgrade
-  #aipChart: aip/charts/portal-4.5.0.tgz
+  aipChart: aip/charts/portal-4.5.0.tgz
   
   #Uncomment During 8.2.10:4.5.3  Upgrade
-  aipChart: aip/charts/portal-4.5.3.tgz
+  #aipChart: aip/charts/portal-4.5.3.tgz
 
   # Yaml file with settings defining the pod resources.
   # Located under "riskPackagesDir" directory
