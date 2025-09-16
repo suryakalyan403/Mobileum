@@ -1,7 +1,0 @@
-{{- $persistence := .Values.logPersistence -}}
-{{- $annotations := $persistence.annotations | default dict -}}
-{{- $_ := set $annotations "helm.sh/hook" "pre-install" -}}
-{{- $_ := set $annotations "helm.sh/hook-weight" "-9" -}}
-{{- $_ := set $persistence "annotations" $annotations -}}
-{{- $_ := set $persistence "name" (printf "%s-logs" (include "aip.names.fullname" .)) -}}
-{{- include "aip.resources.pvc" (dict "template" .Values.logPersistence "context" $)}}
