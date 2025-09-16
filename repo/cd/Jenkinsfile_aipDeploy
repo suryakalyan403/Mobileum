@@ -2,9 +2,21 @@ pipeline {
     agent any
 
     parameters {
-        choice(choices: ['all', 'portal', 't80'], description: 'Select microservices to deploy', name: 'MICROSERVICE')
-        booleanParam(defaultValue: false, description: 'Dry run mode', name: 'DRY_RUN')
-        booleanParam(defaultValue: false, description: 'Skip Tests', name: 'SKIP_TESTS')
+        choice(
+            choices: ['all', 'portal', 't80'],
+            description: 'Select microservices to deploy',
+            name: 'MICROSERVICE'
+        )
+        booleanParam(
+            defaultValue: false,
+            description: 'Dry run mode',
+            name: 'DRY_RUN'
+        )
+        booleanParam(
+            defaultValue: false,
+            description: 'Skip Tests',
+            name: 'SKIP_TESTS'
+        )
     }
 
     environment {
@@ -14,6 +26,7 @@ pipeline {
     }
 
     stages {
+
         stage('Pre-deployment Checks') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
@@ -28,13 +41,14 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                checkout([$class: 'GitSCM',
-                  branches: [[name: '*/main']],
-                  userRemoteConfigs: [[
-                    url: 'https://github.com/suryakalyan403/Mobileum.git',
-                    credentialsId: 'git-creds'
-                  ]],
-                  extensions: [[$class: 'CloneOption', depth: 1, noTags: true, shallow: true]]
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/suryakalyan403/Mobileum.git',
+                        credentialsId: 'git-creds'
+                    ]],
+                    extensions: [[$class: 'CloneOption', depth: 1, noTags: true, shallow: true]]
                 ])
             }
         }
@@ -42,30 +56,36 @@ pipeline {
         stage('Deploy Services') {
             steps {
                 script {
+                    // Determine services to deploy
                     def servicesToDeploy = params.MICROSERVICE == 'all' ? env.MICROSERVICES.split() : [params.MICROSERVICE]
                     def dryRunFlag = params.DRY_RUN ? "dry-run" : ""
 
-                    servicesToDeploy.each { service ->
-                        stage("Deploy ${service}") {
-                            try {
-                                sh """
-                                    cd ${env.DEPLOYMENT_DIR}
-                                    export TERM=xterm
-                                    echo "y" | bash risk-man.sh install ${service} ${dryRunFlag}
-                                """
+                    // Wrap deployment in kubeconfig credentials
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        servicesToDeploy.each { service ->
+                            stage("Deploy ${service}") {
+                                try {
+                                    // Deployment script
+                                    sh """
+                                        cd ${env.DEPLOYMENT_DIR}
+                                        export TERM=xterm
+                                        export KUBECONFIG=$KUBECONFIG
+                                        echo "y" | bash risk-man.sh install ${service} ${dryRunFlag}
+                                    """
 
-                                if (!params.DRY_RUN) {
-                                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                                    // Wait for pods only if not dry-run
+                                    if (!params.DRY_RUN) {
                                         timeout(time: 10, unit: 'MINUTES') {
                                             sh """
-                                                export KUBECONFIG=$KUBECONFIG
-                                                kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=${service} -n raid-rafm-${service} --timeout=300s
+                                                kubectl wait --for=condition=ready pod \
+                                                    -l app.kubernetes.io/instance=${service} \
+                                                    -n raid-rafm-${service} --timeout=300s
                                             """
                                         }
                                     }
+                                } catch (Exception e) {
+                                    error "Failed to deploy ${service}: ${e.getMessage()}"
                                 }
-                            } catch (Exception e) {
-                                error "Failed to deploy ${service}: ${e.getMessage()}"
                             }
                         }
                     }
