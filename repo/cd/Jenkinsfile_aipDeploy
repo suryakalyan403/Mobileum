@@ -27,8 +27,8 @@ pipeline {
                 }
             }
         }
-          
-       stage('Checkout Code') {
+
+        stage('Checkout Code') {
             steps {
                 checkout([$class: 'GitSCM',
                   branches: [[name: '*/main']],
@@ -39,6 +39,7 @@ pipeline {
                   extensions: [[$class: 'CloneOption', depth: 1, noTags: true, shallow: true]]
                 ])
             }
+        }
 
         stage('Pre-deployment Checks') {
             steps {
@@ -96,7 +97,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Update deployment documentation
                     sh '''
                         echo "Updating deployment documentation..."
                         date +%Y-%m-%d_%H-%M-%S > ${DEPLOYMENT_DIR}/last_deployment.txt
@@ -115,8 +115,8 @@ pipeline {
             archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
         }
         always {
-            // Conditional JUnit processing as shown above
             cleanWs()
         }
     }
 }
+
