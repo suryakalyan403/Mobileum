@@ -14,15 +14,13 @@ pipeline {
     }
 
     stages {
-        stage('Cluster Jenkins Connection Test') {
+        stage('Pre-deployment Checks') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh '''
                         export KUBECONFIG=$KUBECONFIG
                         echo "Kubeconfig file: $KUBECONFIG"
                         kubectl cluster-info
-                        kubectl get nodes
-                        kubectl get pods -A | head -20
                     '''
                 }
             }
@@ -38,22 +36,6 @@ pipeline {
                   ]],
                   extensions: [[$class: 'CloneOption', depth: 1, noTags: true, shallow: true]]
                 ])
-            }
-        }
-
-        stage('Pre-deployment Checks') {
-            steps {
-                script {
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh '''
-                            export KUBECONFIG=$KUBECONFIG
-                            # Check cluster connectivity
-                            kubectl cluster-info
-                            # Check storage availability
-                            kubectl get pvc -A
-                        '''
-                    }
-                }
             }
         }
 
