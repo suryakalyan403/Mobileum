@@ -128,7 +128,7 @@ pipeline {
 
                                     // Wait for pods only if not dry-run
                                     if (!params.DRY_RUN) {
-                                        timeout(time: 10, unit: 'MINUTES') {
+                                        timeout(time: 30, unit: 'MINUTES') {
                                             sh """
                                                 kubectl wait --for=condition=ready pod \
                                                     -l app.kubernetes.io/instance=${service} \
