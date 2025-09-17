@@ -90,7 +90,7 @@ pipeline {
                     def selectSat     = params.SATELLITE?.trim()
                     def selectService = params.SATMICROSERVICE?.trim()
                     def selectSecret  = params.SECRETS?.trim()
-                    def dryRunFlag    = params.DRY_RUN ? "--dry-run" : ""
+                    def dryRunFlag    = params.DRY_RUN ? "dry-run" : ""
 
                     // Wrap deployment in kubeconfig credentials
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
