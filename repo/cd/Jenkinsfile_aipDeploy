@@ -14,17 +14,17 @@ pipeline {
         )
         choice(
             name: 'SATELLITE',
-            choices: ['satellite'],
+            choices: ['','satellite'],
             description: 'To deploy satellite pods'
         )
         choice(
             name: 'SATMICROSERVICE',
-            choices: ['sat1', 'sat2', 'sat3', 'sat4', 'sat5', 'sat6'],
+            choices: ['','sat1', 'sat2', 'sat3', 'sat4', 'sat5', 'sat6'],
             description: 'Select satellite microservices'
         )
         choice(
             name: 'SECRETS',
-            choices: ['product-config', 'license'],
+            choices: ['','product-config', 'license'],
             description: 'Select secrets'
         )
         booleanParam(
