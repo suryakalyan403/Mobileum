@@ -14,17 +14,17 @@ pipeline {
         )
         choice(
             name: 'SATELLITE',
-            choices: ['','satellite'],
+            choices: ['', 'satellite'],
             description: 'To deploy satellite pods'
         )
         choice(
             name: 'SATMICROSERVICE',
-            choices: ['','sat1', 'sat2', 'sat3', 'sat4', 'sat5', 'sat6'],
+            choices: ['', 'sat1', 'sat2', 'sat3', 'sat4', 'sat5', 'sat6'],
             description: 'Select satellite microservices'
         )
         choice(
             name: 'SECRETS',
-            choices: ['','product-config', 'license'],
+            choices: ['', 'product-config', 'license'],
             description: 'Select secrets'
         )
         booleanParam(
@@ -41,12 +41,11 @@ pipeline {
 
     environment {
         DEPLOYMENT_DIR = "${WORKSPACE}/../src/bin"
-        MICROSERVICES = "portal t80 t50 t52 t54 t55 t56"
-        TERM = "xterm"
+        MICROSERVICES  = "portal t80 t50 t52 t54 t55 t56"
+        TERM           = "xterm"
     }
 
     stages {
-
         stage('Pre-deployment Checks') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
@@ -82,9 +81,8 @@ pipeline {
             steps {
                 script {
                     // Determine services to deploy
-                    def servicesToDeploy = (params.MICROSERVICE == 'all')
-                        ? env.MICROSERVICES.split()
-                        : [params.MICROSERVICE]
+                    def servicesToDeploy = (params.MICROSERVICE == 'all') ?
+                        env.MICROSERVICES.split() : [params.MICROSERVICE]
 
                     def method        = params.METHODS
                     def selectSat     = params.SATELLITE?.trim()
@@ -135,6 +133,8 @@ pipeline {
                 }
             }
         }
+    }
+
     post {
         success {
             echo "✅ Successful deployment: ${params.MICROSERVICE} - ${env.BUILD_URL}"
