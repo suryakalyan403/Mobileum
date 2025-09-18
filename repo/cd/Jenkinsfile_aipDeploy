@@ -132,7 +132,7 @@ pipeline {
                                             sh """
                                                 kubectl wait --for=condition=ready pod \
                                                     -l app.kubernetes.io/instance=${service} \
-                                                    -n raid-rafm-${service} --timeout=300s
+                                                    -n raid-rafm-${service} --timeout=30s
                                             """
                                         }
                                     }
@@ -147,9 +147,6 @@ pipeline {
         }
 
         stage('Update Documentation') {
-            when {
-                expression { return !params.DRY_RUN }
-            }
             steps {
                 script {
                     sh '''
