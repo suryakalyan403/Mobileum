@@ -4,7 +4,7 @@ pipeline {
     parameters {
         choice(
             name: 'MICROSERVICE',
-            choices: ['all', 'portal', 't80'],
+            choices: ['all', 'portal', 't80', 't50', 't52', 't54', 't55', 't56'],
             description: 'Select microservices'
         )
         choice(
