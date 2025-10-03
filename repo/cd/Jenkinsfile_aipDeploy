@@ -3,14 +3,14 @@ pipeline {
 
     parameters {
         choice(
-            name: 'MICROSERVICE',
-            choices: ['all', 'portal', 't80', 't50', 't52', 't54', 't55', 't56'],
-            description: 'Select microservices'
-        )
-        choice(
             name: 'METHODS',
             choices: ['install', 'upgrade', 'deploy-to-portal', 'restart', 'update-secret'],
             description: 'Select deployment methods'
+        )
+        choice(
+            name: 'MICROSERVICE',
+            choices: ['all', 'portal', 't80', 't50', 't52', 't54', 't55', 't56'],
+            description: 'Select microservices'
         )
         choice(
             name: 'SATELLITE',
@@ -31,11 +31,6 @@ pipeline {
             name: 'DRY_RUN',
             defaultValue: false,
             description: 'Dry run mode'
-        )
-        booleanParam(
-            name: 'SKIP_TESTS',
-            defaultValue: false,
-            description: 'Skip Tests'
         )
     }
 
