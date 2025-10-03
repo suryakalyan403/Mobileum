@@ -92,6 +92,8 @@ pipeline {
                             stage("Deploy ${service}") {
                                 try {
                                     // Build risk-man.sh command
+                                    echo "Buliding the risk man command"
+                                    echo "$method"
                                     def cmdParts = ["bash", "risk-man.sh", method, service]
 
                                     if (selectSat) {
